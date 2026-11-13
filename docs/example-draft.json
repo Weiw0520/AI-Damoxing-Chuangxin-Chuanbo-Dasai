@@ -1,0 +1,38 @@
+{
+  "draftId": "draft_201cb10155884ed2bc3fce0d690b1518",
+  "mode": "mock",
+  "sources": [
+    {
+      "sourceId": "src_0c0426f704cdff46653ad229401f77683c4309fd449e248b3237c796511b4c30",
+      "title": "山东非遗资料",
+      "text": "潍坊风筝历史悠久，具有鲜明的地方特色。",
+      "url": "https://example.com/source"
+    }
+  ],
+  "brief": "介绍山东非遗体验，吸引游客",
+  "platform": "小红书",
+  "blocks": [
+    {
+      "blockId": "block_1",
+      "text": "走近山东非遗：潍坊风筝历史悠久，具有鲜明的地方特色。",
+      "status": "supported",
+      "evidence": [
+        {
+          "sourceId": "src_0c0426f704cdff46653ad229401f77683c4309fd449e248b3237c796511b4c30",
+          "quote": "潍坊风筝历史悠久，具有鲜明的地方特色。"
+        }
+      ],
+      "reviewReason": "仅展示原文引用匹配；模拟模式尚未完成真实 AI 核验。"
+    },
+    {
+      "blockId": "block_2",
+      "text": "出发前，请向当地官方渠道确认开放时间、票价和体验预约方式。",
+      "status": "needs_review",
+      "evidence": [],
+      "reviewReason": "资料不足：未确认开放时间、票价及预约信息，发布前需核实。模拟模式尚未完成真实 AI 核验。"
+    }
+  ],
+  "history": [],
+  "createdAt": "2026-11-12T08:08:12.959170+00:00",
+  "updatedAt": "2026-11-12T08:08:12.959170+00:00"
+}
