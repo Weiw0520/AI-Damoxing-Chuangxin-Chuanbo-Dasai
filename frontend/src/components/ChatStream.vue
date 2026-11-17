@@ -7,9 +7,7 @@
  */
 import { computed, nextTick, ref, watch } from 'vue'
 import ChatMessage from './ChatMessage.vue'
-import Composer from './Composer.vue'
 import InputPanel from './InputPanel.vue'
-import VerifyBar from './VerifyBar.vue'
 import GeneratingState from './states/GeneratingState.vue'
 import ErrorState from './states/ErrorState.vue'
 import { chatItems, currentConv, lastReplyId, state } from '../stores/draft'
@@ -28,8 +26,7 @@ const subtitle = computed(() => {
   if (state.phase === 'empty') return '提交资料后开始'
   if (state.phase === 'generating') return '正在生成与核对'
   if (state.phase === 'error') return '生成失败'
-  const v = state.savedVersion ? `v${state.savedVersion}` : '未保存'
-  return `${state.draftId || '草稿未创建'} · ${v}`
+  return `${state.draftId || '草稿未创建'} · ${state.savedAt ? '已保存' : '未保存'}`
 })
 
 /** 新生成的一份文案从资料读起；切到旧草稿也一样，先看到自己提交了什么。 */
@@ -70,7 +67,7 @@ watch(
     </div>
 
     <!-- 待办顶在正文上方：生成完先看到「哪几条要你拍板」，不用翻核验报告 -->
-    <VerifyBar v-if="state.phase === 'result'" />
+    <div v-if="state.phase === 'result'" class="integration-note">多轮追问及人工判定回写暂不支持；请在右栏逐段修改并保存。</div>
 
     <div ref="scroller" class="chat-scroll">
       <div class="chat-inner">
@@ -84,6 +81,5 @@ watch(
       </div>
     </div>
 
-    <Composer v-if="state.phase === 'result'" />
   </section>
 </template>

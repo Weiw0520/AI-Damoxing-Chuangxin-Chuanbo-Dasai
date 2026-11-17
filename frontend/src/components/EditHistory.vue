@@ -31,7 +31,7 @@ import { visibleHistory } from '../stores/draft'
 
       <div class="empty-mini" style="margin-top: 8px; text-align: left; line-height: 1.8">
         这份记录会随草稿一起保存，用于说明「哪些内容是 AI 写的、哪些是人改的」。
-        导出时会附在文末，对应赛道三「人机协作留痕」的评审要求。
+        服务端历史保留修改前后的正文、旧依据及时间。TXT 仅导出最新正文和状态，不附历史。
       </div>
     </template>
   </div>

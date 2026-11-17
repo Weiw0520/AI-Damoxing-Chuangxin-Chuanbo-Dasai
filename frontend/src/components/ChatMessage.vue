@@ -64,7 +64,7 @@ const badge = computed(() => {
     <div class="bubble bubble-material">
       <div class="b-head">
         <span class="b-kicker">资料原文</span>
-        <span class="b-tag">{{ PLATFORM[item.platform] || '小红书' }}</span>
+        <span class="b-tag">{{ PLATFORM[item.platform] || item.platform }}</span>
       </div>
 
       <p class="b-text">{{ shown }}</p>

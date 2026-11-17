@@ -5,6 +5,7 @@ __pycache__/
 *.pyc
 data/
 .cache/
+.npm-cache/
 *.db
 *.db-*
 *.sqlite
@@ -24,3 +25,5 @@ frontend/node_modules/
 frontend/dist/
 frontend/.npm-cache/
 frontend/.tmp/
+output/playwright/
+.playwright-cli/
