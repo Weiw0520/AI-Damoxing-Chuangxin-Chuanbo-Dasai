@@ -1,4 +1,4 @@
-import { computed, reactive } from 'vue'
+import { computed, nextTick, reactive } from 'vue'
 import * as api from '../api'
 import { CASES } from '../api/cases'
 import { toDraftView, toHistoryView } from '../api/draftView'
@@ -16,12 +16,14 @@ export const state = reactive({
   edits: {}, editMode: false, activeTab: 'copy', filter: null,
   draftId: null, savedVersion: 0, savedAt: null, saving: false, saveError: '', history: [],
   exporting: false, exportError: '', loadingDraft: false,
+  activePane: 'chat', composerText: '', composerError: '', creatingFromBrief: false, newDraftNotice: '',
   panel: { collapsed: false, width: 308, tabs: [], active: null },
   drawer: { open: false, mode: 'claim', claimId: null, sourceId: null },
   exportOpen: false, confirm: { open: false, title: '', desc: '' }, mode: 'C 后端联调',
 })
 let confirmResolver = null
-const busy = () => state.saving || state.exporting || state.loadingDraft || state.phase === 'generating'
+const busy = () => state.saving || state.exporting || state.loadingDraft || state.creatingFromBrief || state.phase === 'generating'
+export const isBusy = computed(busy)
 export const claimsList = computed(() => (state.result?.segments || []).flatMap((seg) => seg.claims.map((claim) => ({ seg, claim }))))
 export const stats = computed(() => {
   const counts = { supported: 0, needs_review: 0, edited_needs_review: 0, total: claimsList.value.length }
@@ -106,6 +108,10 @@ function hydrate(draft, keepView = false) {
   state.saveError = ''
   state.phase = 'result'
   if (!keepView) {
+    state.activePane = 'chat'
+    state.composerText = ''
+    state.composerError = ''
+    state.newDraftNotice = ''
     state.editMode = false
     state.activeTab = 'copy'
     state.filter = null
@@ -139,9 +145,15 @@ export async function openConversation(id) {
   finally { state.loadingDraft = false }
 }
 export async function newConversation() {
-  if (busy()) return
-  if (hasEdits.value && !await askConfirm('开始新草稿？', '未保存的修改将丢失。')) return
+  if (busy() || state.confirm.open) return false
+  if (hasEdits.value && !await askConfirm('开始新草稿？', '当前正文有未保存的修改。确认后将放弃这些修改，已保存的原稿仍保留。')) return false
   resetInput()
+  state.activePane = 'chat'
+  await nextTick()
+  const title = document.getElementById('source-title-0')
+  title?.focus()
+  title?.scrollIntoView({ block: 'center' })
+  return true
 }
 export function resetResult() {
   state.result = null; state.serverDraft = null; state.edits = {}; state.editMode = false
@@ -149,6 +161,7 @@ export function resetResult() {
   state.savedAt = null; state.saveError = ''; state.exportError = ''; state.exportOpen = false
   state.history = []; state.phase = 'empty'; state.panel.tabs = []; state.panel.active = null
   state.mode = 'C 后端联调'
+  state.composerText = ''; state.composerError = ''; state.newDraftNotice = ''
   closeDrawer()
 }
 export function resetInput() {
@@ -195,9 +208,9 @@ export function focusDraft() {
 export function jumpToReport(filter) { state.filter = filter; state.activeTab = 'report' }
 export function setEditMode(on) {
   state.editMode = on
-  if (on) { openFile('draft'); toast('改完请保存；修改段落需重新复核') }
+  if (on) { openFile('draft'); state.activePane = 'files'; toast('改完请保存；修改段落需重新复核') }
 }
-export function setEdit(id, text) { if (!state.saving && !state.exporting) state.edits[id] = text }
+export function setEdit(id, text) { if (!busy()) state.edits[id] = text }
 export function openClaim(id) { state.drawer = { open: true, mode: 'claim', claimId: id, sourceId: null } }
 export function openSource(id) { state.drawer = { open: true, mode: 'source', claimId: null, sourceId: id } }
 export function closeDrawer() { state.drawer.open = false }
@@ -209,6 +222,7 @@ export async function save() {
   try {
     const draft = await api.saveDraft(state.draftId, edits)
     hydrate(draft, true)
+    state.composerError = ''
     toast('已保存；修改段落标为人工修改后待复核')
     return draft
   } catch (error) {
@@ -223,7 +237,7 @@ export function openExport() {
 }
 export function closeExport() { if (!state.exporting) state.exportOpen = false }
 export async function doExport() {
-  if (!state.draftId || state.saving || state.exporting) return
+  if (!state.draftId || busy()) return
   if (hasEdits.value) { toast('请先保存修改，再下载服务端最新版'); return }
   state.exporting = true; state.exportError = ''
   try {
@@ -241,6 +255,35 @@ export async function copyAll() {
   toast(ok ? '页面正文已复制（不等同服务端导出）' : '复制失败，请使用服务端 TXT 下载')
 }
 export async function saveThenExport() { if (await save()) state.exportOpen = true }
+
+// C has no chat/refine endpoint: always create a separate draft using the original sources.
+export async function generateFromRequirements() {
+  if (!state.serverDraft || busy() || state.confirm.open) return null
+  const instruction = state.composerText.trim()
+  if (!instruction) return null
+  if (hasEdits.value) {
+    state.composerError = '当前正文有未保存修改，请先保存，再按新要求生成新草稿。'
+    return null
+  }
+  const original = state.serverDraft
+  const payload = {
+    sources: original.sources.map(({ title, text, url }) => ({ title, text, ...(url ? { url } : {}) })),
+    brief: `${original.brief}\n\n【本次新增要求】\n${instruction}`,
+    platform: original.platform,
+  }
+  state.creatingFromBrief = true
+  state.composerError = ''
+  try {
+    const draft = await api.generate(payload)
+    hydrate(draft)
+    state.newDraftNotice = `已按新要求生成新草稿；原稿 ${original.draftId} 保留，可在左栏或按编号重新打开。`
+    toast('新草稿已保存，原稿保留；当前仍以服务端模式标识为准')
+    return draft
+  } catch (error) {
+    state.composerError = `生成新草稿失败：${error.message}。原稿未更改，输入已保留，可重试。`
+    return null
+  } finally { state.creatingFromBrief = false }
+}
 export function askConfirm(title, desc) {
   return new Promise((resolve) => { confirmResolver = resolve; state.confirm = { open: true, title, desc } })
 }

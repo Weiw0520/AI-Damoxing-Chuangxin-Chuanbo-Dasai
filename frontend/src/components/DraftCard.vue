@@ -109,7 +109,7 @@ import {
 
           <div class="editor-btns">
             <button class="btn btn-ghost" @click="copyAll">复制全文</button>
-            <button class="btn btn-primary" :disabled="state.saving" @click="save">
+            <button class="btn btn-primary" :disabled="state.saving || state.creatingFromBrief" @click="save">
               {{ state.saving ? '保存中…' : '保存草稿' }}
             </button>
           </div>

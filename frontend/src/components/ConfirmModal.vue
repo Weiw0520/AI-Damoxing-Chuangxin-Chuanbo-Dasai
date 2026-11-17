@@ -4,9 +4,9 @@ import { resolveConfirm, state } from '../stores/draft'
 
 <template>
   <div v-if="state.confirm.open" class="modal-mask" @click.self="resolveConfirm(false)">
-    <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
       <div class="modal-head">
-        <h3>{{ state.confirm.title }}</h3>
+        <h3 id="confirm-title">{{ state.confirm.title }}</h3>
         <button class="icon-btn" aria-label="关闭" @click="resolveConfirm(false)">×</button>
       </div>
 

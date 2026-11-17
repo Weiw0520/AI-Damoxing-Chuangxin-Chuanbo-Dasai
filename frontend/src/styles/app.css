@@ -276,6 +276,22 @@
   display: none;
 }
 
+.workspace-nav { flex: 0 0 auto; align-self: center; margin: 8px; }
+.modal-mask { grid-template-columns: minmax(0, 1fr); overflow-y: auto; }
+.modal { width: min(480px, 100%); min-width: 0; }
+.composer-title { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ink-2); }
+.composer-input { min-width: 0; }
+.composer .send-btn { height: auto; min-height: 34px; max-width: 150px; white-space: normal; line-height: 1.5; padding: 6px 10px; }
+.composer .composer-error { margin: 8px 0 0; font-size: 12px; overflow-wrap: anywhere; }
+
+@media (max-width: 640px) {
+  .topbar-meta { display: grid; grid-template-columns: auto minmax(0, 1fr); width: 100%; min-width: 0; gap: 6px; }
+  .topbar-meta .draft-chip { min-width: 0; max-width: 100%; }
+  .topbar-meta .draft-chip span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .topbar-meta .save-state { display: none; }
+  .topbar-meta .topbar-actions { grid-column: 1 / -1; justify-content: flex-end; }
+}
+
 .chat-scroll {
   flex: 1 1 auto;
   overflow-y: auto;
