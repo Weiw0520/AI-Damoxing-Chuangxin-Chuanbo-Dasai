@@ -1,0 +1,50 @@
+{
+  "notice": "手工构造的离线回放，不是真实模型结果。",
+  "input_sha256": "00c60eb1aad5c7df633dffcacf2e0ac7415280d7bc172d92fae1f3435d6f9fab",
+  "generate": {
+    "segments": [
+      {
+        "id": "block_1",
+        "text": "想认识杨家埠木版年画？先记住它的家乡：山东省潍坊市杨家埠。",
+        "evidence": [
+          {
+            "source_id": "src_6ab5f3b7ce698c5d3cc71cf5541008a726fb57f350c69c38947f5f3956ee9eef",
+            "quote": "山东省潍坊市杨家埠的一种民间版画"
+          }
+        ]
+      },
+      {
+        "id": "block_2",
+        "text": "它是这样做出来的：钩描、刻版、印刷，三道工序组成杨家埠木版年画的制作过程。",
+        "evidence": [
+          {
+            "source_id": "src_9eabd907d21571b0dd33bd3aa8f187c3f1748f3711c3be584460446b652eeaf3",
+            "quote": "杨家埠木版年画分钩描、刻版、印刷3道工序"
+          }
+        ]
+      }
+    ]
+  },
+  "review": {
+    "reviews": [
+      {
+        "segment_id": "block_1",
+        "text": "想认识杨家埠木版年画？先记住它的家乡：山东省潍坊市杨家埠。",
+        "verdict": "supported",
+        "reason": "引文明示山东省潍坊市杨家埠，文案仅改写所在地。",
+        "used_evidence": [
+          0
+        ]
+      },
+      {
+        "segment_id": "block_2",
+        "text": "它是这样做出来的：钩描、刻版、印刷，三道工序组成杨家埠木版年画的制作过程。",
+        "verdict": "supported",
+        "reason": "引文明示钩描、刻版、印刷3道工序；三道与3道含义相同。",
+        "used_evidence": [
+          0
+        ]
+      }
+    ]
+  }
+}
