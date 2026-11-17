@@ -29,6 +29,7 @@ $env:CORS_ORIGINS = 'http://localhost:5173,http://127.0.0.1:5173'
 
 - A 接入：[API 合同与示例](docs/API_CONTRACT.md)。
 - B 接入：[生成器替换说明](docs/GENERATOR_INTEGRATION.md)。
+- A 的 Vue 三栏工作台现已接入 C；前后端双终端启动、代理配置、按编号重载及下载步骤见 [前端联调指南](FRONTEND_GUIDE.md)。页面以服务端完整草稿为准，默认明确显示“模拟联调”；真实 AI 尚未接入。
 - 测试覆盖中文创建、引用、修改历史、原子保存、下载最新版、重建应用读回、空输入、404、稳定资料 ID 和生成器注入。
 
 C v0.1 交付前已在独立目录的新虚拟环境中完成安装、5 项测试、真实 HTTP 联调和服务进程重启验收，详见 [交付复核记录](docs/DELIVERY_REVIEW.md)。交给队友时包含 `backend/` 的源码、依赖清单和测试，以及 `docs/`、`README.md`、`pytest.ini`、`.gitignore`；不要打包 `.venv/`、`data/`、`.acceptance-*/` 或缓存。示例 JSON 只用于前端开发，读取服务中的草稿必须使用本次创建返回的 draftId。
