@@ -42,6 +42,8 @@ npm run dev
 4. 在右栏逐段修改并保存：`PATCH /api/drafts/{draftId}`，只发送变化段落的 `blockId`、`text`。服务端完整响应替换页面数据；变化段落显示“人工修改后待复核”、当前依据清空，旧依据仍保存在服务端历史。未变化段落保持原状态和依据。失败时保留未保存文字并提示。
 5. 导出只支持 `GET /api/drafts/{draftId}/export` 的 UTF-8 TXT。未保存时需先保存；页面接收真实文件字节并沿用响应文件名，不增加 BOM、不改正文。导出失败明确提示且不下载替代文件。复制全文仅为复制当前页面文字，不等同服务端导出。
 6. 创建/读取后，URL 保留 `?draftId=...`，本机仅记住最后一个草稿编号。刷新通过 `GET /api/drafts/{draftId}` 读取数据库最新版；也可在左栏输入编号读取。左栏快捷入口仅覆盖本页打开过的草稿，不是服务端草稿列表。
+7. 左栏“＋ 新建”会切到空白资料表单并聚焦第一份标题；有未保存正文时先确认，取消保留原稿和修改。窄屏的“草稿 / 正文 / 文件”导航位于三栏之外，在任一栏都可切换。
+8. 打开或生成草稿后，中栏底部显示“新草稿生成要求”。提交按钮为“按新要求生成新草稿”：沿用原资料和平台，把原需求与新增要求合并后 POST /api/drafts，得到新编号，原稿保留。这不是多轮对话；模拟生成器只演示创建流程，不执行真实改写或核验。失败时保留原稿和输入，成功后切到新稿；请求中防止重复提交。若正文有未保存修改，请先保存。
 
 状态值严格沿用 [API_CONTRACT.md](docs/API_CONTRACT.md)：`supported`（有资料依据）、`needs_review`（待核验）、`edited_needs_review`（人工修改后待复核）。当前“核验报告”为段落级展示，不捏造逐句 AI 核验。C 不提供版本号或并发锁，页面不向后端提交伪造版本。
 
@@ -61,5 +63,14 @@ npm run build
 ```
 
 `npm test` 使用 Node 自带测试工具，检查 C 请求字段、方法、资料保留、文件字节和导出错误，不调用模型。构建产物位于 `frontend/dist/`，不提交。生产部署需要另外提供 `/api` 转发、后端持久化和访问控制；C 不会自动托管 dist。本轮只验收本地开发联调，不部署。
+
+“新建”和底部输入框的浏览器回归脚本为 `frontend/qa/new-draft-and-chat.cjs`。启动前后端后，从根目录使用独立浏览器会话（本机 Edge）运行：
+
+```powershell
+npx --yes --package @playwright/cli playwright-cli -s=new-chat-qa open http://127.0.0.1:5173 --browser msedge --headed
+npx --yes --package @playwright/cli playwright-cli -s=new-chat-qa run-code --filename frontend/qa/new-draft-and-chat.cjs
+```
+
+脚本使用测试资料创建草稿，并模拟一次失败响应检查输入保留；应对独立验收数据库运行。它覆盖桌面/窄屏新建焦点、取消/确认未保存修改、新要求创建与防重、长文滚动、依据/保存/TXT 下载。检查记录见 [新建与输入框修复验收](docs/NEW_DRAFT_CHAT_REVIEW.md)。
 
 `frontend/node_modules/`、`frontend/.npm-cache/`、`frontend/dist/`、`data/`、`output/playwright/` 和 `.playwright-cli/` 均为本机依赖或验收产物，不提交。网页验收记录见 [A–C 集成验收](docs/AC_INTEGRATION_REVIEW.md)。

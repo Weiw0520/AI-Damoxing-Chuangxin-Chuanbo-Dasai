@@ -8,12 +8,10 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import ChatMessage from './ChatMessage.vue'
 import InputPanel from './InputPanel.vue'
+import Composer from './Composer.vue'
 import GeneratingState from './states/GeneratingState.vue'
 import ErrorState from './states/ErrorState.vue'
 import { chatItems, currentConv, lastReplyId, state } from '../stores/draft'
-
-defineProps({ pane: { type: String, default: 'chat' } })
-defineEmits(['pane'])
 
 const scroller = ref(null)
 
@@ -59,15 +57,10 @@ watch(
         <span class="ch-sub">{{ subtitle }}</span>
       </div>
 
-      <div class="pane-switch">
-        <button :class="{ 'is-on': pane === 'list' }" @click="$emit('pane', 'list')">对话</button>
-        <button :class="{ 'is-on': pane === 'chat' }" @click="$emit('pane', 'chat')">正文</button>
-        <button :class="{ 'is-on': pane === 'files' }" @click="$emit('pane', 'files')">文件</button>
-      </div>
     </div>
 
     <!-- 待办顶在正文上方：生成完先看到「哪几条要你拍板」，不用翻核验报告 -->
-    <div v-if="state.phase === 'result'" class="integration-note">多轮追问及人工判定回写暂不支持；请在右栏逐段修改并保存。</div>
+    <div v-if="state.phase === 'result'" class="integration-note">{{ state.newDraftNotice || '底部输入框会按新要求生成另一份草稿并保留原稿，不是多轮 AI 对话。' }}</div>
 
     <div ref="scroller" class="chat-scroll">
       <div class="chat-inner">
@@ -81,5 +74,6 @@ watch(
       </div>
     </div>
 
+    <Composer v-if="state.phase === 'result'" />
   </section>
 </template>
