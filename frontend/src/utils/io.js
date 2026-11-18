@@ -35,15 +35,18 @@ function fallbackCopy(text) {
   }
 }
 
-export function download(filename, blob) {
-  if (!(blob instanceof Blob)) throw new Error('服务端下载内容无效')
+export function download(filename, text) {
+  const payload = '\ufeff' + text
+  const blob = new Blob([payload], { type: 'text/plain;charset=utf-8' })
   const a = document.createElement('a')
   a.download = filename
   let objectUrl = null
   if (typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
     objectUrl = URL.createObjectURL(blob)
     a.href = objectUrl
-  } else throw new Error('浏览器不支持文件下载')
+  } else {
+    a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(payload)
+  }
   document.body.appendChild(a)
   a.click()
   setTimeout(() => {

@@ -1,50 +1,93 @@
 <script setup>
-import { nextTick, ref } from 'vue'
-import { generateFromRequirements, isBusy, state } from '../stores/draft'
+/**
+ * 中栏底部的输入框 —— 生成之后，用户在这里继续提要求。
+ *
+ * 这里只负责「把一句话交出去」，判断能不能改、怎么改全在服务端。
+ * 前端不做本地规则：同一句话在两处被解释成两个意思，是最难查的那种 bug。
+ */
+import { computed, nextTick, ref } from 'vue'
+import { refine, state } from '../stores/draft'
 
+const QUICK = [
+  '删掉无依据的表述',
+  '第二段太长，压缩一半',
+  '把没出处的说法改保守',
+  '这些依据分别是什么',
+]
+
+const text = ref('')
 const ta = ref(null)
+const busy = computed(() => state.refining)
+
 function autogrow() {
-  if (!ta.value) return
-  ta.value.style.height = 'auto'
-  ta.value.style.height = Math.min(ta.value.scrollHeight, 120) + 'px'
+  const el = ta.value
+  if (!el) return
+  el.style.height = 'auto'
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px'
 }
-async function send() {
-  if (isBusy.value) return
-  const result = await generateFromRequirements()
-  if (result) { await nextTick(); autogrow() }
+
+async function send(preset) {
+  if (busy.value) return
+  const t = (preset != null ? preset : text.value).trim()
+  if (!t) return
+
+  const res = await refine(t)
+  // 成功才清空：失败（比如示例数据模式下不能追问）时把话留在框里，改完能直接重发
+  if (res) {
+    text.value = ''
+    await nextTick()
+    autogrow()
+  }
   ta.value?.focus()
 }
+
 function onKeydown(e) {
-  if (e.key !== 'Enter' || e.shiftKey || e.isComposing) return
+  if (e.key !== 'Enter' || e.shiftKey) return
+  if (e.isComposing) return // 中文输入法选词时的回车不能当发送
   e.preventDefault()
   send()
 }
 </script>
 
 <template>
-  <form class="composer" @submit.prevent="send">
+  <div class="composer">
     <div class="composer-inner">
-      <label for="newDraftRequirement" class="composer-title">新草稿生成要求</label>
-      <div class="composer-box" :class="{ 'is-busy': state.creatingFromBrief }">
+      <div class="quick-row">
+        <button
+          v-for="q in QUICK"
+          :key="q"
+          class="quick-chip"
+          :disabled="busy"
+          @click="send(q)"
+        >
+          {{ q }}
+        </button>
+      </div>
+
+      <div class="composer-box" :class="{ 'is-busy': busy }">
         <textarea
-          id="newDraftRequirement"
           ref="ta"
-          v-model="state.composerText"
-          rows="2"
+          v-model="text"
+          rows="1"
           class="composer-input"
-          placeholder="例如：更简短，侧重工艺介绍。将使用原资料创建另一份草稿。"
-          :disabled="isBusy"
+          placeholder="继续说要求，例如「删掉第三段那句没出处的」「整体再短一点」"
+          :disabled="busy"
           @input="autogrow"
           @keydown="onKeydown"
         ></textarea>
-        <button type="submit" class="send-btn" :disabled="isBusy || !state.composerText.trim()">
-          {{ state.creatingFromBrief ? '正在生成新草稿…' : '按新要求生成新草稿' }}
+
+        <button class="send-btn" :disabled="busy || !text.trim()" @click="send()">
+          {{ busy ? '改写中…' : '发送' }}
         </button>
       </div>
-      <p v-if="state.composerError" role="alert" class="composer-error">{{ state.composerError }}</p>
+
       <div class="composer-hint">
-        <span>沿用原资料与平台，合并原需求和新增要求；保留原稿，不是多轮 AI 对话。{{ state.result?.mode === 'mock' ? '模拟生成器仅演示流程，不执行真实改写或核验。' : '' }}</span>
+        <span v-if="state.refineError" class="composer-error">{{ state.refineError }}</span>
+        <span v-else class="composer-tip">
+          能删、能压缩、能改保守；不会凭空补事实 —— 补写会让核验结论失效。
+        </span>
+        <span class="composer-kbd">Enter 发送 · Shift + Enter 换行</span>
       </div>
     </div>
-  </form>
+  </div>
 </template>

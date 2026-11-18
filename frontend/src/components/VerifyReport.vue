@@ -4,9 +4,9 @@ import { claimsList, openClaim, openSource, state } from '../stores/draft'
 import { STATUS_CLASS, STATUS_TEXT } from '../utils/text'
 
 const groups = [
-  { key: 'needs_review', title: '待核验 · 资料不足，发布前核实' },
-  { key: 'edited_needs_review', title: '人工修改后待复核' },
-  { key: 'supported', title: '有资料依据' },
+  { key: 'needs_check', title: '待核验 · 需要人工判断' },
+  { key: 'unsupported', title: '无依据 · 建议删除或补充来源' },
+  { key: 'verified', title: '有据可查' },
 ]
 
 const blocks = computed(() => {

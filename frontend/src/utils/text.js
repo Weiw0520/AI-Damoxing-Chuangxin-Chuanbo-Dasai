@@ -4,15 +4,15 @@
  */
 
 export const STATUS_TEXT = {
-  supported: '有资料依据',
-  needs_review: '待核验',
-  edited_needs_review: '人工修改后待复核',
+  verified: '有据可查',
+  needs_check: '待核验',
+  unsupported: '无依据',
 }
 
 export const STATUS_CLASS = {
-  supported: 'ok',
-  needs_review: 'warn',
-  edited_needs_review: 'warn',
+  verified: 'ok',
+  needs_check: 'warn',
+  unsupported: 'bad',
 }
 
 /**
@@ -99,16 +99,17 @@ export function splitByClaims(text, claims = []) {
 }
 
 export function hlClass(status) {
-  if (status !== 'supported') return 'hl-warn'
+  if (status === 'needs_check') return 'hl-warn'
+  if (status === 'unsupported') return 'hl-bad'
   return 'hl-ok'
 }
 
 /** 上标文字：有据显示来源号，待核验加前缀，无依据固定两字。 */
 export function citeText(claim) {
   const ids = claim.cite_ids || []
-  if (claim.status === 'supported') return '查看原文依据'
-  if (claim.status === 'edited_needs_review') return '人工修改后待复核'
-  return '待核验'
+  if (claim.status === 'verified') return ids.length ? ids.join('·') : '已核'
+  if (claim.status === 'needs_check') return ids.length ? '待核·' + ids.join('·') : '待核'
+  return '无据'
 }
 
 export function sanitizeFilename(name) {

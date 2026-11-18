@@ -1,12 +1,12 @@
 <script setup>
 import { computed } from 'vue'
-import { closeDrawer, drawerData } from '../stores/draft'
+import { applySuggest, closeDrawer, drawerData, toggleManual } from '../stores/draft'
 import { STATUS_TEXT } from '../utils/text'
 
 const icon = computed(() => {
   if (!drawerData.value || drawerData.value.mode !== 'claim') return ''
   const s = drawerData.value.claim.status
-  return s === 'supported' ? '✓' : '!'
+  return s === 'verified' ? '✓' : s === 'needs_check' ? '!' : '×'
 })
 </script>
 
@@ -63,7 +63,7 @@ const icon = computed(() => {
               <template v-if="drawerData.claim.cite_ids.length">
                 {{ drawerData.claim.cite_ids.join('、') }}
               </template>
-              <span v-else style="color: var(--red)">当前段落未附依据</span>
+              <span v-else style="color: var(--red)">无（模型未给出处）</span>
             </dd>
             <dt>判定</dt>
             <dd>{{ STATUS_TEXT[drawerData.claim.status] }}</dd>
@@ -79,7 +79,7 @@ const icon = computed(() => {
           <template v-if="drawerData.quotes.length">
             <div v-for="(q, i) in drawerData.quotes" :key="i">
               <div class="quote-box">
-                <span class="quote-label">{{ q.sourceLabel }} · {{ q.sourceTitle }}</span>
+                <span class="quote-label">{{ q.sourceId }} · {{ q.sourceTitle }}</span>
                 <template v-for="(p, j) in q.parts" :key="j">
                   <mark v-if="p.mark">{{ p.text }}</mark>
                   <template v-else>{{ p.text }}</template>
@@ -111,13 +111,17 @@ const icon = computed(() => {
             </div>
           </template>
 
-          <!-- No client-side verdicts: C owns reviewReason, status, and evidence. -->
+          <!-- 没有任何引文时，必须说清「为什么没有」，而且不能一律当成编造。
+               两种情况的处置完全相反：
+                 · unsupported        → 话是编的，该删或该补来源
+                 · needs_check 空引文 → 资料根本没写到这一处（如「能不能带孩子上手捏一个」），
+                                        正文在这里留了白。这时让人去删是错的，该去补资料。 -->
           <div v-else class="quote-box quote-empty" :class="{ 'is-blank': drawerData.blankGap }">
-            <template v-if="drawerData.claim.status === 'edited_needs_review'">
-              人工修改后的当前段落没有沿用旧依据，需重新复核。修改前的内容和依据保存在服务端历史中。
+            <template v-if="drawerData.blankGap">
+              资料里没有写到这一处，正文在这里是<strong>故意留白</strong>，不是编的。要补齐这一句，得先在资料里补上对应信息（如体验项目、适合年龄），再重新生成——工具不会替你猜。
             </template>
             <template v-else>
-              当前段落没有可展示的原文依据。请按上方服务端说明补充资料，并在发布前核实。
+              模型没有为这处表述提供任何来源。这通常意味着它是被「补」进来的常识或数据，应当删除或人工补充来源后再用。
             </template>
           </div>
 
@@ -142,7 +146,16 @@ const icon = computed(() => {
 
       <div class="drawer-foot">
         <template v-if="drawerData.mode === 'claim'">
-          <p class="field-hint">此处展示服务端保存的依据与状态；人工确认回写暂不支持。编辑文案后请保存并重新复核。</p>
+          <button
+            v-if="drawerData.claim.suggest && drawerData.claim.status !== 'verified'"
+            class="btn btn-primary"
+            @click="applySuggest"
+          >
+            采纳建议并改写
+          </button>
+          <button class="btn btn-ghost" @click="toggleManual">
+            {{ drawerData.claim.status === 'verified' ? '标为待核验' : '人工确认可用' }}
+          </button>
         </template>
       </div>
     </aside>

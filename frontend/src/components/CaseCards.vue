@@ -5,7 +5,7 @@ import { loadCase, state } from '../stores/draft'
 <template>
   <div class="case-loader">
     <label class="field-label">
-      载入示例资料 <span class="tag-muted">结果由 C 后端生成</span>
+      载入示例案例 <span class="tag-muted">评委 5 秒跑通</span>
     </label>
 
     <div class="case-list">
@@ -24,7 +24,7 @@ import { loadCase, state } from '../stores/draft'
       </button>
 
       <div v-if="!state.cases.length" class="empty-mini" style="text-align: left">
-        暂无预设资料，请填写每份资料的标题与原文。
+        案例列表没加载出来。检查后端是否启动，或点左下角「切换」改用示例数据模式。
       </div>
     </div>
   </div>

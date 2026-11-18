@@ -31,25 +31,25 @@ import {
       <div class="dc-head">
         <div class="dc-title">
           文案初稿
-          <span class="dc-ver">已保存 · {{ state.history.length }} 条修改记录</span>
+          <span class="dc-ver">{{ state.savedVersion ? 'v' + state.savedVersion : '未保存' }}</span>
         </div>
         <div class="dc-meta">
-          {{ state.mode }} ·
+          {{ state.result.model }} · 提示词 {{ state.result.prompt_version }} ·
           {{ state.result.created_at }}
         </div>
       </div>
 
       <div class="summary">
-        <button class="sum-item ok" @click="jumpToReport('supported')">
-          <span class="sum-dot"></span><b>{{ stats.supported }}</b> 段有资料依据
+        <button class="sum-item ok" @click="jumpToReport('verified')">
+          <span class="sum-dot"></span><b>{{ stats.verified }}</b> 处有据可查
         </button>
-        <button class="sum-item warn" @click="jumpToReport('needs_review')">
-          <span class="sum-dot"></span><b>{{ stats.needs_review }}</b> 段待核验
+        <button class="sum-item warn" @click="jumpToReport('needs_check')">
+          <span class="sum-dot"></span><b>{{ stats.needs_check }}</b> 处待核验
         </button>
-        <button class="sum-item warn" @click="jumpToReport('edited_needs_review')">
-          <span class="sum-dot"></span><b>{{ stats.edited_needs_review }}</b> 段修改后待复核
+        <button class="sum-item bad" @click="jumpToReport('unsupported')">
+          <span class="sum-dot"></span><b>{{ stats.unsupported }}</b> 处无依据
         </button>
-        <span class="sum-meta">{{ stats.total }} 段文案</span>
+        <span class="sum-meta">{{ stats.total }} 处事实性表述</span>
       </div>
 
       <div
@@ -109,7 +109,7 @@ import {
 
           <div class="editor-btns">
             <button class="btn btn-ghost" @click="copyAll">复制全文</button>
-            <button class="btn btn-primary" :disabled="state.saving || state.creatingFromBrief" @click="save">
+            <button class="btn btn-primary" :disabled="state.saving" @click="save">
               {{ state.saving ? '保存中…' : '保存草稿' }}
             </button>
           </div>

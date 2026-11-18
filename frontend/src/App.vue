@@ -16,7 +16,7 @@ import ConfirmModal from './components/ConfirmModal.vue'
 import ToastHost from './components/ToastHost.vue'
 import { closeDrawer, closeExport, generate, init, state } from './stores/draft'
 
-const pane = computed({ get: () => state.activePane, set: (value) => { state.activePane = value } })
+const pane = ref('chat')
 const viewport = ref(0)
 
 /**
@@ -72,15 +72,9 @@ onUnmounted(() => {
   <div class="app">
     <AppTopbar />
 
-    <nav class="pane-switch workspace-nav" aria-label="工作区栏位">
-      <button :class="{ 'is-on': pane === 'list' }" :aria-pressed="pane === 'list'" @click="pane = 'list'">草稿</button>
-      <button :class="{ 'is-on': pane === 'chat' }" :aria-pressed="pane === 'chat'" @click="pane = 'chat'">正文</button>
-      <button :class="{ 'is-on': pane === 'files' }" :aria-pressed="pane === 'files'" @click="pane = 'files'">文件</button>
-    </nav>
-
     <div class="shell" :class="'pane-' + pane" :style="{ '--right-w': rightWidth }">
       <ConversationList />
-      <ChatStream />
+      <ChatStream :pane="pane" @pane="pane = $event" />
       <FilePanel />
     </div>
   </div>

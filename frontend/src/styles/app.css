@@ -9,23 +9,6 @@
   height: 100%;
 }
 
-/* Keep A's independent pane scrolling at 981–1080px too. */
-.app { height: 100vh; min-height: 0; }
-
-/* C integration keeps the three-pane workspace and adds structured source fields. */
-.source-input { border: 1px solid var(--line, #ddd); border-radius: 10px; padding: 14px; margin: 12px 0; }
-.source-input input, .draft-loader input {
-  display: block; width: 100%; min-width: 0; box-sizing: border-box;
-  padding: 10px; margin: 6px 0 12px; border: 1px solid var(--line, #ddd);
-  border-radius: 6px; background: var(--paper, #fff); color: var(--ink, #222); font: inherit;
-}
-.source-input textarea { margin: 6px 0 12px; }
-.draft-loader { padding: 16px; }
-.integration-note { padding: 10px 20px; color: var(--ink-3); font-size: 12px; line-height: 1.7; border-bottom: 1px solid var(--line, #ddd); }
-.mode-pill { white-space: nowrap; }
-.meta-table dd, .quote-label, .drawer .field-hint { overflow-wrap: anywhere; }
-.seg-text { white-space: pre-wrap; }
-
 /* 文案正文：模板里的换行不能被当成空格渲染出来，
    否则中文段落会出现莫名其妙的空隙。 */
 .seg-text {
@@ -274,22 +257,6 @@
 
 .pane-switch {
   display: none;
-}
-
-.workspace-nav { flex: 0 0 auto; align-self: center; margin: 8px; }
-.modal-mask { grid-template-columns: minmax(0, 1fr); overflow-y: auto; }
-.modal { width: min(480px, 100%); min-width: 0; }
-.composer-title { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ink-2); }
-.composer-input { min-width: 0; }
-.composer .send-btn { height: auto; min-height: 34px; max-width: 150px; white-space: normal; line-height: 1.5; padding: 6px 10px; }
-.composer .composer-error { margin: 8px 0 0; font-size: 12px; overflow-wrap: anywhere; }
-
-@media (max-width: 640px) {
-  .topbar-meta { display: grid; grid-template-columns: auto minmax(0, 1fr); width: 100%; min-width: 0; gap: 6px; }
-  .topbar-meta .draft-chip { min-width: 0; max-width: 100%; }
-  .topbar-meta .draft-chip span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .topbar-meta .save-state { display: none; }
-  .topbar-meta .topbar-actions { grid-column: 1 / -1; justify-content: flex-end; }
 }
 
 .chat-scroll {

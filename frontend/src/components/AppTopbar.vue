@@ -5,13 +5,13 @@ import { toast } from '../utils/toast'
 
 const draftText = computed(() => {
   if (!state.draftId) return '草稿 未创建'
-  return `草稿 ${state.draftId}`
+  return `草稿 ${state.draftId} · ${state.savedVersion ? 'v' + state.savedVersion : '未保存'}`
 })
 
 const saveState = computed(() => {
   if (state.phase !== 'result') return { text: '—', cls: '' }
   if (hasEdits.value) return { text: '● 未保存修改', cls: 'is-dirty' }
-  if (state.savedVersion > 0) return { text: '✓ 已由服务端保存', cls: 'is-saved' }
+  if (state.savedVersion > 0) return { text: `✓ 已保存 v${state.savedVersion}`, cls: 'is-saved' }
   return { text: '草稿尚未保存', cls: '' }
 })
 
@@ -37,7 +37,6 @@ function goHistory() {
     </div>
 
     <div class="topbar-meta">
-      <span class="mode-pill is-live">{{ state.mode }}</span>
       <div class="draft-chip" :class="{ 'is-live': !!state.draftId }" title="同一草稿贯穿生成、编辑、导出">
         <span class="dot"></span>
         <span>{{ draftText }}</span>

@@ -1,76 +1,72 @@
-# 鲁遗校真前端与 C 后端联调
+# A 原版前端与非 AI 后端联调
 
-前端为 Vue 3 + Vite。沿用 A 的三栏工作台、来源抽屉、逐段编辑和修改历史，接入仓库现有 FastAPI + SQLite 后端。所有生成、保存和导出均请求 C；不再提供前端模拟结果或失败时本地导出兜底。C 默认返回 `mode=mock`，页面明确展示“模拟联调，尚未完成真实 AI 核验”。
+本分支 `frontend/` 完整恢复自 `origin/feature/a-frontend`，保留原有界面、请求、示例模式、新建、对话输入和导出交互。后端使用专门的 `backend.a_main:app`，不使用 C 的同名路由来冒充 A 的响应。
 
 ## Windows PowerShell 启动
 
-需要 Python 3.10+、Node.js 22+（含 npm）。以下命令均从仓库根目录开始，不需要激活虚拟环境或配置密钥。
-
-终端一：
+需要 Python 3.10+、Node.js 22+（含 npm）。从仓库根目录执行，首次安装：
 
 ```powershell
-Set-Location -LiteralPath 'D:\项目\AI大模型创新传播大赛'
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r backend/requirements.txt
-.\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
-终端二：
+终端一，从根目录启动 A 兼容后端。以下使用独立测试库，可安全验收，不写用户已有库；人工样例是显式导入，不是 AI 生成。重复导入同一编号会拒绝覆盖，已有样例时略过导入命令即可。
 
 ```powershell
-Set-Location -LiteralPath 'D:\项目\AI大模型创新传播大赛\frontend'
+$env:DRAFT_DB_PATH = Join-Path $PWD 'data\a-compat-test.sqlite3'
+.\.venv\Scripts\python.exe -m backend.a_seed --db $env:DRAFT_DB_PATH --id A-MANUAL-TEST
+.\.venv\Scripts\python.exe -m uvicorn backend.a_main:app --host 127.0.0.1 --port 8000
+```
+
+日常使用可去掉测试导入，并在启动前移除测试路径变量 `Remove-Item Env:DRAFT_DB_PATH -ErrorAction SilentlyContinue`，恢复默认 `data/drafts.sqlite3`。空库返回空列表，不会自动生成测试稿。A 和 C 分别使用 `a_drafts/a_revisions` 与原 `drafts` 表；C 旧草稿不会自动转换到 A 列表，也不会被覆盖。
+
+终端二，从仓库根目录：
+
+```powershell
+Set-Location frontend
 npm ci
+$env:VITE_USE_MOCK = 'false'
 npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 
-浏览器打开 <http://127.0.0.1:5173>。后端接口文档为 <http://127.0.0.1:8000/docs>。后端默认数据库在 `data/drafts.sqlite3`；验收可在启动前指定 `$env:DRAFT_DB_PATH = Join-Path $PWD 'data\ac-integration.sqlite3'`，避免写入已有草稿库。两个终端分别用 Ctrl+C 停止。
+打开 <http://127.0.0.1:5173>；确认右上角是“真实后端模式”。API 文档为 <http://127.0.0.1:8000/docs>。Vite 原配置将 `/api` 代理到 `http://127.0.0.1:8000`，无需改前端文件。若改后端端口，启动 Vite 前设置 `$env:VITE_PROXY_TARGET = 'http://127.0.0.1:8001'`。若直接跨域，`VITE_API_BASE` 必须含 `/api`，后端 `CORS_ORIGINS` 配置精确前端 origin，默认支持 localhost/127.0.0.1 的 5173。环境变量修改后需重启对应服务。
 
-开发默认请求相对路径 `/api`，由 Vite 代理到 `http://127.0.0.1:8000`，因此浏览器不用跨域请求。更改后端端口时，在终端二启动前设置：
+## 本轮实际支持
 
-```powershell
-$env:VITE_PROXY_TARGET = 'http://127.0.0.1:8001'
-npm run dev
-```
+- 案例卡读取：只加载 A 原有三份案例的输入，不返回预制生成结果。
+- 资料上传：服务端提取文本和 DOCX 正文；5 MB/20000 字符，PDF 等返回明确错误。
+- 草稿列表、详情、已有资料引文查看：从数据库读取 A 格式人工测试稿或将来 B 保存的 A 格式稿。
+- 人工编辑保存：PUT 全段列表，版本冲突拒绝覆盖，事务保存正文与前后历史；变更段落需重新复核，未变段落依据保留。A 原版收到保存回执后不重载 claims，重新打开草稿后可见服务端更新的核验信息。
+- TXT、Markdown、核验报告导出：POST 从数据库取最新正文，返回 JSON 内容供原版前端下载。报告只是已有数据汇总，未运行事实核验。
 
-若直接跨域访问，可用 `$env:VITE_API_BASE = 'http://127.0.0.1:8000/api'`，并在后端设置包含实际前端 origin 的 `CORS_ORIGINS`。`VITE_API_BASE` 必须包含 `/api`；更改这些环境变量后重启 Vite。旧 `VITE_USE_MOCK` 已不再使用。
+保留的原版行为：导出失败后 A 有本地兜底；判定服务端导出成功必须检查 POST export 200。人工确认按钮修改的 claims 不在 PUT 请求中，后端保留历史备注，不推断核验通过。原有“新建”和对话交互未做改动。
 
-## 页面操作与实际接口
+原版抽屉对 needs_check 空引文附有“故意留白”等通用说明；人工修改场景以服务端返回的“人工修改后待复核”原因和历史为准。已验证范围与这些边界见 [验收记录](docs/A_COMPAT_REVIEW.md)。
 
-1. 填写逐份资料的标题、原文和可选链接，可添加/移除资料；示例卡只载入输入，不提供预制结果。杨家埠卡含两份独立资料。
-2. 填传播需求、选平台，点击生成：`POST /api/drafts`，请求仅包含 `sources`、`brief`、`platform`。资料不会合并后丢失出处，链接仅保存，不自动抓取。
-3. 页面展示服务端 `blocks` 的正文、依据与状态。点击“查看原文依据”打开引文、标题及链接；来源清单可查看每份完整提交原文。
-4. 在右栏逐段修改并保存：`PATCH /api/drafts/{draftId}`，只发送变化段落的 `blockId`、`text`。服务端完整响应替换页面数据；变化段落显示“人工修改后待复核”、当前依据清空，旧依据仍保存在服务端历史。未变化段落保持原状态和依据。失败时保留未保存文字并提示。
-5. 导出只支持 `GET /api/drafts/{draftId}/export` 的 UTF-8 TXT。未保存时需先保存；页面接收真实文件字节并沿用响应文件名，不增加 BOM、不改正文。导出失败明确提示且不下载替代文件。复制全文仅为复制当前页面文字，不等同服务端导出。
-6. 创建/读取后，URL 保留 `?draftId=...`，本机仅记住最后一个草稿编号。刷新通过 `GET /api/drafts/{draftId}` 读取数据库最新版；也可在左栏输入编号读取。左栏快捷入口仅覆盖本页打开过的草稿，不是服务端草稿列表。
-7. 左栏“＋ 新建”会切到空白资料表单并聚焦第一份标题；有未保存正文时先确认，取消保留原稿和修改。窄屏的“草稿 / 正文 / 文件”导航位于三栏之外，在任一栏都可切换。
-8. 打开或生成草稿后，中栏底部显示“新草稿生成要求”。提交按钮为“按新要求生成新草稿”：沿用原资料和平台，把原需求与新增要求合并后 POST /api/drafts，得到新编号，原稿保留。这不是多轮对话；模拟生成器只演示创建流程，不执行真实改写或核验。失败时保留原稿和输入，成功后切到新稿；请求中防止重复提交。若正文有未保存修改，请先保存。
+## AI 与示例边界
 
-状态值严格沿用 [API_CONTRACT.md](docs/API_CONTRACT.md)：`supported`（有资料依据）、`needs_review`（待核验）、`edited_needs_review`（人工修改后待复核）。当前“核验报告”为段落级展示，不捏造逐句 AI 核验。C 不提供版本号或并发锁，页面不向后端提交伪造版本。
+“生成文案”调用 `POST /api/generate`，对话提交调用 `POST /api/drafts/{id}/refine`；两者当前返回 501 和“AI 功能暂未接入”，数据库不变。A 的“真实后端模式”表示网络接口可用，不表示模型上线。人工样例明确显示“人工录入测试稿（非 AI）”。
 
-## 当前不支持
+原有 `VITE_USE_MOCK=true` 或页面“切换”仍可启用前端内存示例模式；示例数据不是模型输出，不写后端库。真实 AI 的输入、预期输出和后续位置见 [AI 待办](docs/AI_TODO.md)。实际非 AI 契约见 [A 后端兼容契约](docs/A_BACKEND_COMPAT.md)。
 
-多轮追问、服务端文件解析、服务端草稿列表、人工确认状态回写、Markdown/独立报告下载均暂不支持，相关操作已隐藏或标注，不会调用 `/generate`、`/cases`、`/extract`、`/refine` 等不存在的接口。平台选择会保存到草稿；模拟器尚不生成真实平台风格。
+## 验证命令
 
-## 测试和构建
+仓库根目录：
 
 ```powershell
-# 在 frontend 目录
-npm test
-npm run build
-
-# 在仓库根目录
+# 避免模块导入时初始化用户已有库；测试本身用 pytest 临时库
+$env:DRAFT_DB_PATH = Join-Path $PWD 'data\a-tests-import.sqlite3'
 .\.venv\Scripts\python.exe -m pytest backend/tests -q
+git diff --exit-code origin/feature/a-frontend -- frontend/
+git ls-files --others --exclude-standard -- frontend/
+git diff --check
 ```
 
-`npm test` 使用 Node 自带测试工具，检查 C 请求字段、方法、资料保留、文件字节和导出错误，不调用模型。构建产物位于 `frontend/dist/`，不提交。生产部署需要另外提供 `/api` 转发、后端持久化和访问控制；C 不会自动托管 dist。本轮只验收本地开发联调，不部署。
-
-“新建”和底部输入框的浏览器回归脚本为 `frontend/qa/new-draft-and-chat.cjs`。启动前后端后，从根目录使用独立浏览器会话（本机 Edge）运行：
+frontend 目录：
 
 ```powershell
-npx --yes --package @playwright/cli playwright-cli -s=new-chat-qa open http://127.0.0.1:5173 --browser msedge --headed
-npx --yes --package @playwright/cli playwright-cli -s=new-chat-qa run-code --filename frontend/qa/new-draft-and-chat.cjs
+npm run build
 ```
 
-脚本使用测试资料创建草稿，并模拟一次失败响应检查输入保留；应对独立验收数据库运行。它覆盖桌面/窄屏新建焦点、取消/确认未保存修改、新要求创建与防重、长文滚动、依据/保存/TXT 下载。检查记录见 [新建与输入框修复验收](docs/NEW_DRAFT_CHAT_REVIEW.md)。
-
-`frontend/node_modules/`、`frontend/.npm-cache/`、`frontend/dist/`、`data/`、`output/playwright/` 和 `.playwright-cli/` 均为本机依赖或验收产物，不提交。网页验收记录见 [A–C 集成验收](docs/AC_INTEGRATION_REVIEW.md)。
+A 原版未提供 `npm test`，不添加虚构命令。`node_modules/`、`dist/`、测试库及浏览器产物不提交。C 原入口仍可单独启动 `python -m uvicorn backend.main:app --port 8001`，接口见 [原 C 契约](docs/API_CONTRACT.md)，它不能作为本页原版 A 前端的后端入口。

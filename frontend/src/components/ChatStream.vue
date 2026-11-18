@@ -7,11 +7,15 @@
  */
 import { computed, nextTick, ref, watch } from 'vue'
 import ChatMessage from './ChatMessage.vue'
-import InputPanel from './InputPanel.vue'
 import Composer from './Composer.vue'
+import InputPanel from './InputPanel.vue'
+import VerifyBar from './VerifyBar.vue'
 import GeneratingState from './states/GeneratingState.vue'
 import ErrorState from './states/ErrorState.vue'
 import { chatItems, currentConv, lastReplyId, state } from '../stores/draft'
+
+defineProps({ pane: { type: String, default: 'chat' } })
+defineEmits(['pane'])
 
 const scroller = ref(null)
 
@@ -24,7 +28,8 @@ const subtitle = computed(() => {
   if (state.phase === 'empty') return '提交资料后开始'
   if (state.phase === 'generating') return '正在生成与核对'
   if (state.phase === 'error') return '生成失败'
-  return `${state.draftId || '草稿未创建'} · ${state.savedAt ? '已保存' : '未保存'}`
+  const v = state.savedVersion ? `v${state.savedVersion}` : '未保存'
+  return `${state.draftId || '草稿未创建'} · ${v}`
 })
 
 /** 新生成的一份文案从资料读起；切到旧草稿也一样，先看到自己提交了什么。 */
@@ -57,10 +62,15 @@ watch(
         <span class="ch-sub">{{ subtitle }}</span>
       </div>
 
+      <div class="pane-switch">
+        <button :class="{ 'is-on': pane === 'list' }" @click="$emit('pane', 'list')">对话</button>
+        <button :class="{ 'is-on': pane === 'chat' }" @click="$emit('pane', 'chat')">正文</button>
+        <button :class="{ 'is-on': pane === 'files' }" @click="$emit('pane', 'files')">文件</button>
+      </div>
     </div>
 
     <!-- 待办顶在正文上方：生成完先看到「哪几条要你拍板」，不用翻核验报告 -->
-    <div v-if="state.phase === 'result'" class="integration-note">{{ state.newDraftNotice || '底部输入框会按新要求生成另一份草稿并保留原稿，不是多轮 AI 对话。' }}</div>
+    <VerifyBar v-if="state.phase === 'result'" />
 
     <div ref="scroller" class="chat-scroll">
       <div class="chat-inner">
