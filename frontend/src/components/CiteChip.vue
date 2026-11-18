@@ -8,7 +8,8 @@ const props = defineProps({
 })
 
 const cls = computed(() => ({
-  'is-warn': props.claim.status !== 'supported',
+  'is-warn': props.claim.status === 'needs_check',
+  'is-bad': props.claim.status === 'unsupported',
   'is-active': props.active,
 }))
 

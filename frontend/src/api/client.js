@@ -1,6 +1,12 @@
-const ENV = import.meta.env || {}
-const BASE = (ENV.VITE_API_BASE || '/api').replace(/\/$/, '')
-const TIMEOUT = Number(ENV.VITE_TIMEOUT_MS || 60000)
+/**
+ * 统一请求封装。
+ *
+ * 所有接口都走相对路径 /api —— 开发时由 Vite 代理到 127.0.0.1:8000，
+ * 生产时由后端自己托管 dist，两种部署方式都不用改代码。
+ */
+
+const BASE = import.meta.env.VITE_API_BASE || '/api'
+const TIMEOUT = Number(import.meta.env.VITE_TIMEOUT_MS || 60000)
 
 export class ApiFailure extends Error {
   constructor(message, code = 'UNKNOWN', status = 0) {
@@ -11,41 +17,58 @@ export class ApiFailure extends Error {
   }
 }
 
-export function errorDetail(data, status) {
-  const detail = data?.detail
-  if (Array.isArray(detail)) {
-    return detail.map((item) => `${(item.loc || []).filter((v) => v !== 'body').join('.')}: ${item.msg}`).join('；')
-  }
-  return (typeof detail === 'string' ? detail : detail?.message) || `请求失败（HTTP ${status}）`
-}
-
-export async function request(path, { method = 'GET', body, responseType = 'json', timeout = TIMEOUT } = {}) {
+export async function request(path, { method = 'GET', body, raw = false, timeout = TIMEOUT } = {}) {
   const ctrl = new AbortController()
   const timer = setTimeout(() => ctrl.abort(), timeout)
+
+  // raw=true 时 body 原样发出（File / Blob / ArrayBuffer），不套 JSON。
+  // 上传资料走这条路：后端用 request.body() 读原始字节，省掉 multipart 依赖。
+  const payload = body === undefined ? undefined : raw ? body : JSON.stringify(body)
+  const headers = body === undefined || raw ? undefined : { 'Content-Type': 'application/json' }
+
+  let res
   try {
-    const res = await fetch(BASE + path, {
-      method, signal: ctrl.signal,
-      headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
-      body: body === undefined ? undefined : JSON.stringify(body),
+    res = await fetch(BASE + path, {
+      method,
+      headers,
+      body: payload,
+      signal: ctrl.signal,
     })
-    if (!res.ok) {
-      const data = await res.json().catch(() => null)
-      throw new ApiFailure(errorDetail(data, res.status), data?.detail?.code || `HTTP_${res.status}`, res.status)
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      throw new ApiFailure(
+        `请求超时（${Math.round(timeout / 1000)} 秒）。资料较长时模型可能来不及返回，可先缩短资料再试。`,
+        'CLIENT_TIMEOUT',
+        0
+      )
     }
-    if (responseType === 'download') {
-      if (!res.headers.get('Content-Type')?.toLowerCase().startsWith('text/plain')) {
-        throw new ApiFailure('导出接口未返回 TXT 文件，未触发下载。', 'INVALID_EXPORT', res.status)
-      }
-      const disposition = res.headers.get('Content-Disposition') || ''
-      const filename = /filename="?([^";]+)"?/i.exec(disposition)?.[1] || 'draft.txt'
-      return { filename, blob: await res.blob() }
+    throw new ApiFailure(
+      '连不上后端服务。请确认 backend 已启动（默认 http://127.0.0.1:8000），或点左下角「切换」改用示例数据模式。',
+      'NETWORK_ERROR',
+      0
+    )
+  } finally {
+    clearTimeout(timer)
+  }
+
+  const text = await res.text()
+  let data = null
+  if (text) {
+    try {
+      data = JSON.parse(text)
+    } catch (e) {
+      data = null
     }
-    return await res.json()
-  } catch (error) {
-    if (error instanceof ApiFailure) throw error
-    if (error.name === 'AbortError') {
-      throw new ApiFailure('请求超时。请重新读取草稿确认保存状态后再重试。', 'CLIENT_TIMEOUT')
-    }
-    throw new ApiFailure('无法连接 C 后端，请确认后端已启动及 /api 代理配置正确。', 'NETWORK_ERROR')
-  } finally { clearTimeout(timer) }
+  }
+
+  if (!res.ok) {
+    const detail = data && data.detail
+    const message =
+      (detail && typeof detail === 'object' ? detail.message : detail) ||
+      `请求失败（HTTP ${res.status}）`
+    const code = (detail && typeof detail === 'object' && detail.code) || `HTTP_${res.status}`
+    throw new ApiFailure(message, code, res.status)
+  }
+
+  return data
 }

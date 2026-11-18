@@ -82,7 +82,7 @@ const useCount = computed(() => {
 
 const savedText = computed(() => {
   if (!state.savedVersion) return '尚未保存'
-  return `已保存 · ${new Date(state.savedAt).toLocaleString('zh-CN')}`
+  return `v${state.savedVersion} · ${String(state.savedAt || '').replace('T', ' ').slice(0, 16)}`
 })
 
 const editing = computed(() => state.editMode && !!activeFile.value?.editable)
@@ -189,7 +189,7 @@ async function download(f) {
             <span class="fv-ext">{{ activeFile.ext }}</span>
           </div>
           <div class="fv-actions">
-            <button class="btn btn-ghost btn-xs" :disabled="state.saving || state.exporting || state.creatingFromBrief" @click="download(activeFile)">下载</button>
+            <button class="btn btn-ghost btn-xs" @click="download(activeFile)">下载</button>
             <button
               v-if="activeFile.editable"
               class="btn btn-xs"
@@ -207,8 +207,6 @@ async function download(f) {
               <span class="fe-label">{{ seg.label || '正文' }}</span>
               <textarea
                 class="fe-input"
-                :aria-label="seg.label + '正文编辑'"
-                :disabled="state.saving || state.exporting || state.creatingFromBrief"
                 :value="currentText(seg)"
                 :rows="rowsOf(seg)"
                 @input="setEdit(seg.id, $event.target.value)"
@@ -224,7 +222,7 @@ async function download(f) {
 
         <div v-if="editing" class="fview-foot">
           <button class="btn btn-ghost" @click="copyAll">复制全文</button>
-          <button class="btn btn-primary" :disabled="state.saving || state.creatingFromBrief" @click="save">
+          <button class="btn btn-primary" :disabled="state.saving" @click="save">
             {{ state.saving ? '保存中…' : '保存草稿' }}
           </button>
         </div>
@@ -251,7 +249,7 @@ async function download(f) {
             </button>
 
             <p class="rp-note">
-              点文件在右栏打开；下载使用服务端最新版 TXT，文件名带草稿编号。当前预览为页面正文。
+              点文件在右栏打开；下载的是最后一次保存的版本，文件名带草稿编号与版本号。
             </p>
           </template>
         </section>
@@ -265,7 +263,7 @@ async function download(f) {
           <div v-if="!sources.length" class="empty-mini">本次没有引用任何来源。</div>
 
           <button v-for="s in sources" :key="s.id" class="src-item" @click="openSource(s.id)">
-            <span class="si-id">{{ s.label }}</span>
+            <span class="si-id">{{ s.id }}</span>
             <span class="si-body">
               <b>{{ s.title }}</b>
               <span>
@@ -283,12 +281,12 @@ async function download(f) {
           <dl class="meta-table">
             <dt>编号</dt>
             <dd>{{ state.draftId || '未创建' }}</dd>
-            <dt>保存时间</dt>
+            <dt>版本</dt>
             <dd>{{ savedText }}</dd>
             <dt>模型</dt>
             <dd>{{ state.result ? state.result.model : '—' }}</dd>
-            <dt>模式</dt>
-            <dd>{{ state.mode }}</dd>
+            <dt>提示词</dt>
+            <dd>{{ state.result ? state.result.prompt_version : '—' }}</dd>
           </dl>
         </section>
       </div>

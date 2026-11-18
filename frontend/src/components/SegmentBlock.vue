@@ -19,10 +19,10 @@ const edited = computed(
 )
 const parts = computed(() => splitByClaims(text.value, props.seg.claims || []))
 const stale = computed(() => staleClaims(props.seg))
-const changed = computed(() =>
-  (props.seg.claims || []).filter((c) => c.status === 'edited_needs_review')
+const unsupported = computed(() =>
+  (props.seg.claims || []).filter((c) => c.status === 'unsupported')
 )
-const needsCheck = computed(() => (props.seg.claims || []).filter((c) => c.status === 'needs_review'))
+const needsCheck = computed(() => (props.seg.claims || []).filter((c) => c.status === 'needs_check'))
 </script>
 
 <template>
@@ -46,13 +46,13 @@ const needsCheck = computed(() => (props.seg.claims || []).filter((c) => c.statu
     <div class="seg-foot">
       <span v-if="edited" class="edited-mark">人工已修改</span>
       <button
-        v-if="changed.length"
-        class="mini-badge"
-        @click="jumpToReport('edited_needs_review')"
+        v-if="unsupported.length"
+        class="mini-badge bad"
+        @click="jumpToReport('unsupported')"
       >
-        人工修改后待复核
+        {{ unsupported.length }} 处无依据，建议删除
       </button>
-      <button v-if="needsCheck.length" class="mini-badge" @click="jumpToReport('needs_review')">
+      <button v-if="needsCheck.length" class="mini-badge" @click="jumpToReport('needs_check')">
         {{ needsCheck.length }} 处待核验
       </button>
       <span v-if="stale.length" class="mini-badge stale">
