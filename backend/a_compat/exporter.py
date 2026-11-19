@@ -2,7 +2,7 @@ import re
 
 from backend.a_compat.store import merge_history
 
-LABELS = {"verified": "有据可查（既有人工/示例状态）", "needs_check": "待核验", "unsupported": "无依据"}
+LABELS = {"verified": "有资料依据（仍需人工复核）", "needs_check": "待核验", "unsupported": "无依据"}
 
 
 def export(draft, fmt, history):
@@ -23,7 +23,7 @@ def export(draft, fmt, history):
         body.append(marker + seg["text"])
     content = prefix + "\n" + "\n\n".join(body)
     if fmt != "txt":
-        report = ["## 资料依据与待核验项", "本报告只整理已存数据，不表示已运行 AI 核验。"]
+        report = ["## 资料依据与待核验项", "本报告整理已保存的核验信息；导出不会重新运行 AI。"]
         for seg in draft["segments"]:
             for claim in seg.get("claims", []):
                 report.append(f"- {claim['anchor']}：{LABELS[claim['status']]}。{claim['reason']}")

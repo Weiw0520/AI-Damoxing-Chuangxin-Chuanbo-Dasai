@@ -1,0 +1,224 @@
+{
+  "record_type": "B真实模型网页验收字段摘要",
+  "record_date": "2026-11-19",
+  "timezone": "Asia/Shanghai",
+  "evidence_origin": "B在本机执行，并在会话中提交接口响应、状态码、耗时、截图及实际下载文件；摘要不是原始HAR或模型服务日志。",
+  "functional_result": "指定两例的生成、依据展示、修改保存、TXT下载和同库重启读取通过。缺票价生成耗时未留存。",
+  "tested_code_commit": "3534db0e44343893fbddc201adec227775457db0",
+  "branch": "feat/abc-ai-integration",
+  "backend_entry": "backend.a_ai_main:app",
+  "frontend_mode": "VITE_USE_MOCK=false",
+  "model": "qwen4-max",
+  "verify_model": "qwen4-max",
+  "prompt_version": "v5",
+  "base_url": "https://trial.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+  "no_proxy": "127.0.0.1,localhost,trial.cn-beijing.maas.aliyuncs.com",
+  "draft_db_path": "D:\\AI-Damoxing-ABC-Review\\data\\abc-b-real-review.sqlite3",
+  "server_total_timeout_seconds": 45,
+  "offline_tests": {
+    "passed": 88,
+    "warnings": 1,
+    "elapsed_seconds": 6.48
+  },
+  "shared_sources": [
+    {
+      "id": "S1",
+      "origin_id": "src_6ab5f3b7ce698c5d3cc71cf5541008a726fb57f350c69c38947f5f3956ee9eef",
+      "title": "杨家埠木版年画｜国家级非遗项目介绍",
+      "text": "山东省潍坊市杨家埠的一种民间版画",
+      "url": "https://www.ihchina.cn/project_details/13904.html"
+    },
+    {
+      "id": "S2",
+      "origin_id": "src_9eabd907d21571b0dd33bd3aa8f187c3f1748f3711c3be584460446b652eeaf3",
+      "title": "年画之乡景色新｜工艺介绍",
+      "text": "杨家埠木版年画分钩描、刻版、印刷3道工序",
+      "url": "https://www.ihchina.cn/project_details/9691"
+    }
+  ],
+  "cases": {
+    "normal": {
+      "draft_id": "A-9e7e27e7b9f64681b2c403076ef834c5",
+      "requirement": "写一篇面向年轻游客的小红书文案，介绍杨家埠木版年画来自哪里、是怎么做出来的。",
+      "platform": "xiaohongshu",
+      "mode": "real",
+      "data_origin": "ai",
+      "ai_meta_mode": "live",
+      "generated_at": "2026-11-19T14:34:15.590835+00:00",
+      "created_at": "2026-11-19T14:34:15.590879+00:00",
+      "saved_at": "2026-11-19T14:51:53.132931+00:00",
+      "input_sha256": "33700cfbc3e865cb97b493cad0bfa64b029c0dd8e8f30015521b17d2f47a1b39",
+      "input_sha256_verified_offline": true,
+      "generation_request": {
+        "result": "成功返回草稿，响应内容已核对",
+        "http_status_independently_retained": null,
+        "elapsed_seconds": 13.03,
+        "elapsed_note": "浏览器请求总耗时",
+        "initial_statuses": {
+          "P1": "verified",
+          "P2": "verified"
+        }
+      },
+      "edit": {
+        "segment_id": "P1",
+        "before": "📍来认识杨家埠木版年画：它是山东省潍坊市杨家埠的一种民间版画。地名和类别，先记在心里。",
+        "after": "📍来认识杨家埠木版年画：它是山东省潍坊市杨家埠的一种民间版画。我想进一步了解杨家埠木版年画。"
+      },
+      "save_request": {
+        "draft_id": "A-9e7e27e7b9f64681b2c403076ef834c5",
+        "version": 2,
+        "saved_at": "2026-11-19T14:51:53.132931+00:00",
+        "changed_segments": [
+          "P1"
+        ],
+        "http_status": 200,
+        "elapsed_ms": null
+      },
+      "reload": {
+        "http_status": null,
+        "version": 2,
+        "edited_text_preserved": true,
+        "statuses": {
+          "P1": "needs_check",
+          "P2": "verified"
+        },
+        "P1_review_status": "edited_needs_review",
+        "P1_current_cite_ids": [],
+        "P1_current_quotes": [],
+        "old_evidence_in_history": true,
+        "human_diff_in_history": true
+      },
+      "export": {
+        "http_status": 200,
+        "version": 2,
+        "format": "txt",
+        "filename": "A-9e7e27e7b9f64681b2c403076ef834c5_v2.txt",
+        "bytes": 522,
+        "sha256": "6bf9b0a0627be812001686bd4eaad13114f767958de3fe541c01a0c22d21ca2f",
+        "utf8_bom": true,
+        "decoded_text_exactly_matches_response": true,
+        "new_sentence_present": true,
+        "replaced_sentence_present": false
+      },
+      "restart_read": {
+        "status": "通过（B按同库重启步骤提交的回读响应）",
+        "http_status": 200,
+        "version": 2,
+        "edited_text_preserved": true,
+        "p1_claim_status": "needs_check",
+        "p1_review_status": "edited_needs_review",
+        "p2_claim_status": "verified",
+        "original_ai_meta_preserved": true,
+        "created_at_preserved": true,
+        "updated_at_preserved": true,
+        "evidence_file": "normal.after-restart.json（B本地完整响应）"
+      }
+    },
+    "missing_price": {
+      "draft_id": "A-c142c58214f34873b1fade27f4253bc8",
+      "requirement": "写一篇面向年轻游客的小红书文案，介绍杨家埠木版年画来自哪里、是怎么做出来的。请补充门票价格；如果资料不足，请明确标记为待核验。",
+      "platform": "xiaohongshu",
+      "mode": "real",
+      "data_origin": "ai",
+      "ai_meta_mode": "live",
+      "generated_at": "2026-11-19T15:09:55.986143+00:00",
+      "created_at": "2026-11-19T15:09:55.988886+00:00",
+      "saved_at": "2026-11-19T15:21:43.521161+00:00",
+      "input_sha256": "00c60eb1aad5c7df633dffcacf2e0ac7415280d7bc172d92fae1f3435d6f9fab",
+      "input_sha256_verified_offline": true,
+      "generation_request": {
+        "result": "成功返回草稿，响应内容已核对",
+        "http_status_independently_retained": null,
+        "elapsed_seconds": null,
+        "elapsed_note": "未留存，未使用保存耗时代替",
+        "initial_statuses": {
+          "P1": "verified",
+          "P2": "verified",
+          "pending_0": "needs_check"
+        }
+      },
+      "edit": {
+        "segment_id": "P1",
+        "before": "来认识杨家埠木版年画：它是山东省潍坊市杨家埠的一种民间版画。想逛年画相关目的地的小伙伴，可以先记住这个地点与类别。",
+        "after": "来认识杨家埠木版年画：它是山东省潍坊市杨家埠的一种民间版画。出发前，我会先核实门票信息。"
+      },
+      "save_request": {
+        "draft_id": "A-c142c58214f34873b1fade27f4253bc8",
+        "version": 2,
+        "saved_at": "2026-11-19T15:21:43.521161+00:00",
+        "changed_segments": [
+          "P1"
+        ],
+        "http_status": 200,
+        "elapsed_ms": 32
+      },
+      "reload": {
+        "http_status": 200,
+        "version": 2,
+        "edited_text_preserved": true,
+        "statuses": {
+          "P1": "needs_check",
+          "P2": "verified",
+          "pending_0": "needs_check"
+        },
+        "P1_review_status": "edited_needs_review",
+        "P1_current_cite_ids": [],
+        "P1_current_quotes": [],
+        "old_evidence_in_history": true,
+        "human_diff_in_history": true
+      },
+      "export": {
+        "http_status": 200,
+        "version": 2,
+        "format": "txt",
+        "filename": "A-c142c58214f34873b1fade27f4253bc8_v2.txt",
+        "bytes": 593,
+        "sha256": "a459b7b99b6f2fba269920ad2f5040c43da6bd1e01107e421f746528f9be59b7",
+        "utf8_bom": true,
+        "decoded_text_exactly_matches_response": true,
+        "new_sentence_present": true,
+        "replaced_sentence_present": false
+      },
+      "restart_read": {
+        "status": "通过（B按同库重启步骤提交的回读响应）",
+        "http_status": 200,
+        "version": 2,
+        "edited_text_preserved": true,
+        "p1_claim_status": "needs_check",
+        "p1_review_status": "edited_needs_review",
+        "p2_claim_status": "verified",
+        "original_ai_meta_preserved": true,
+        "created_at_preserved": true,
+        "updated_at_preserved": true,
+        "evidence_file": "missing_price.after-restart.json（B本地完整响应）",
+        "ticket_status": "needs_check",
+        "ticket_text": "门票价格：资料不足，待核验。",
+        "ticket_cite_ids": [],
+        "ticket_quotes": []
+      },
+      "ticket": {
+        "segment_id": "pending_0",
+        "text": "门票价格：资料不足，待核验。",
+        "status": "needs_check",
+        "cite_ids": [],
+        "quotes": [],
+        "reason": "提供的资料未给出门票价格、免费或优惠信息，资料不足，待核验。"
+      }
+    }
+  },
+  "known_limits": [
+    "追问501",
+    "430x932窄屏新建表单可见性问题保留",
+    "保存后需重新打开草稿以刷新claims",
+    "TXT须同时核对服务端export200和实际下载内容"
+  ],
+  "observed_wording_issues": [
+    {
+      "location": "缺票价草稿 history 中前端追加的 AI 生成初稿说明",
+      "observed": "共 3 段、3 处事实性表述已完成来源核对。承诺：未引入资料以外的知识。",
+      "actual": "初稿为2处verified和1处needs_check；当前回读为1处verified和2处needs_check",
+      "assessment": "该历史说明容易被理解为全部有依据；段落结构、界面核验报告与导出均保留不足提示。作为措辞问题记录，建议后续明确有依据与待核验数量。"
+    }
+  ],
+  "credential_note": "密钥仅由本机后端进程环境提供，本记录和附件不含密钥。"
+}

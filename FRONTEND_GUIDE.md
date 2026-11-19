@@ -1,5 +1,7 @@
 # A 原版前端与非 AI 后端联调
 
+需要 A+B+C 生成接入时，将下列后端入口换成 `backend.a_ai_main:app`，并按 [接入说明](docs/ABC_INTEGRATION.md) 提供模型配置、指定独立测试库。缺配置会返回 503；没有配置时不能完成真实模型验收。前端启动命令完全相同。下文保留原非 AI 入口的行为说明。
+
 本分支 `frontend/` 完整恢复自 `origin/feature/a-frontend`，保留原有界面、请求、示例模式、新建、对话输入和导出交互。后端使用专门的 `backend.a_main:app`，不使用 C 的同名路由来冒充 A 的响应。
 
 ## Windows PowerShell 启动
