@@ -703,29 +703,43 @@ export async function refine(instruction) {
 
   state.refining = true
   state.refineError = ''
+  const requestedDraftId = state.draftId
   try {
-    const res = await api.refineDraft(state.draftId, {
+    const res = await api.refineDraft(requestedDraftId, {
       instruction: text,
       base_version: state.savedVersion,
       segments: state.result.segments.map((s) => ({ id: s.id, text: currentText(s) })),
       history: state.history,
     })
 
+    if (state.draftId !== requestedDraftId || !state.result) {
+      refreshConversations()
+      return null
+    }
+
     state.result.segments = res.segments
+    state.result.version = res.version
+    state.result.updated_at = res.saved_at
+    state.result.history = res.history
+    // A rewrite can use a different model/prompt from the original generation.
+    for (const key of ['model', 'prompt_version', 'prompt_excerpt', 'notice', 'mode', 'data_origin', 'ai_meta']) {
+      if (res[key] != null) state.result[key] = res[key]
+    }
     state.edits = {}
     state.editMode = false
     state.history = res.history
     state.savedVersion = res.version
+    state.savedAt = res.saved_at
     // 改写会删掉/新增核验项，待办队列按新正文重新快照
     resetVerify()
 
+    refreshConversations()
     if (res.changed.length || res.removed_segments.length) {
-      state.savedAt = res.saved_at
       toast(`已改到 v${res.version}`)
-      refreshConversations()
     }
     return res
   } catch (err) {
+    if (state.draftId !== requestedDraftId || !state.result) return null
     state.refineError = err.message || '改写失败'
     toast(state.refineError, 4200)
     return null

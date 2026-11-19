@@ -1,8 +1,12 @@
 # 山东非遗文旅宣传内容核验与改写助手
 
-新增可选 A+B+C 生成接入入口 `backend.a_ai_main:app`，启动、资料格式、模型配置、超时和错误行为见 [A+B+C 接入说明](docs/ABC_INTEGRATION.md)。该入口缺少配置返回 503，不自动 mock；底部追问仍未实现。原非 AI 入口及原版前端保留，以下原有说明对应 `backend.a_main:app`。
+可选 A+B+C 入口 `backend.a_ai_main:app` 已接入首次生成、追问改写与依据核验。追问实现、独立运行示例和新一轮验收见 [追问模块说明](docs/B_REFINE_INTEGRATION.md)。沿用已有模型环境变量，缺少配置返回503，不自动回放。生成接入说明见 [ABC_INTEGRATION](docs/ABC_INTEGRATION.md)。2026-11-20已完成qwen4-max真实模型、Windows Edge网页追问、补齐引文、人工保存、实际TXT下载与同库重启读取；记录见 [B追问真实验收](docs/B_REFINE_REAL_ACCEPTANCE.md)。当前完整后端测试166项通过。
 
-本轮结果见 [A+B+C 验收记录](docs/ABC_ACCEPTANCE.md)：真实模型因缺配置未完成；回放和故障模拟单独记录，窄屏问题保持原版并如实记录。
+首次生成的真实网页验收见 [B真实验收记录](docs/ABC_REAL_ACCEPTANCE_B.md)。此前 C 的离线基线记录保留在 [ABC_ACCEPTANCE](docs/ABC_ACCEPTANCE.md)。它们均不替代新增追问功能的真实验收。真实AI演示使用 `backend.a_ai_main:app`，模型环境配置与前端启动见 [ABC接入说明](docs/ABC_INTEGRATION.md)。
+
+## 兼容入口的历史说明
+
+以下命令与说明保留非AI联调入口；生成与追问501仅适用于 `backend.a_main:app`。
 
 本分支恢复 A 原版前端，并增加匹配其请求的非 AI 后端入口 `backend.a_main:app`。列表、详情、文件解析、人工保存、历史和导出可用；生成与对话改写返回 501“AI 功能暂未接入”。无需 API 密钥，不调用模型。完整启动步骤见 [前端联调指南](FRONTEND_GUIDE.md)，实际契约见 [A 兼容后端](docs/A_BACKEND_COMPAT.md)，B 的后续工作见 [AI 待办](docs/AI_TODO.md)。
 

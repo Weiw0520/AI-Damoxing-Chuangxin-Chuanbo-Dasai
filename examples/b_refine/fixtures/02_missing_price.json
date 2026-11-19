@@ -1,0 +1,70 @@
+{
+  "purpose": "显式离线回放，不是真实模型验收。缺票价样例故意模拟错误候选及错误核验以验证拦截。",
+  "input_sha256": "29504c76051cac49167c19db8eca6c3459d5e737302c0bda7edfa99e97c0615a",
+  "refine": {
+    "action": "rewrite",
+    "segments": [
+      {
+        "id": "P1",
+        "text": "杨家埠木版年画是山东省潍坊市杨家埠的一种民间版画。",
+        "evidence": [
+          {
+            "source_id": "S1",
+            "quote": "山东省潍坊市杨家埠的一种民间版画"
+          }
+        ]
+      },
+      {
+        "id": "P2",
+        "text": "杨家埠木版年画分钩描、刻版、印刷三道工序。",
+        "evidence": [
+          {
+            "source_id": "S2",
+            "quote": "杨家埠木版年画分钩描、刻版、印刷3道工序"
+          }
+        ]
+      },
+      {
+        "id": "P3",
+        "text": "杨家埠门票30元。",
+        "evidence": [
+          {
+            "source_id": "S1",
+            "quote": "山东省潍坊市杨家埠的一种民间版画"
+          }
+        ]
+      }
+    ]
+  },
+  "review": {
+    "reviews": [
+      {
+        "segment_id": "P1",
+        "text": "杨家埠木版年画是山东省潍坊市杨家埠的一种民间版画。",
+        "verdict": "supported",
+        "reason": "仅用于离线测试的预设核验输出，不代表真实模型判断。",
+        "used_evidence": [
+          0
+        ]
+      },
+      {
+        "segment_id": "P2",
+        "text": "杨家埠木版年画分钩描、刻版、印刷三道工序。",
+        "verdict": "supported",
+        "reason": "仅用于离线测试的预设核验输出，不代表真实模型判断。",
+        "used_evidence": [
+          0
+        ]
+      },
+      {
+        "segment_id": "P3",
+        "text": "杨家埠门票30元。",
+        "verdict": "supported",
+        "reason": "仅用于离线测试的预设核验输出，不代表真实模型判断。",
+        "used_evidence": [
+          0
+        ]
+      }
+    ]
+  }
+}

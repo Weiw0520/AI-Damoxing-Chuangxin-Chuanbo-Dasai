@@ -1,51 +1,22 @@
-# AI 接入待办（A 原版前端）
+# AI接入状态与后续事项
 
-当前新增可选 `backend.a_ai_main:app`，已实现 A 输入到 B 生成/核验核心的后端适配，并保留审计元数据；真实模型是否可用仍须配置后验收。本文件以下 501 说明仍适用于保留的非 AI 入口 `backend.a_main:app`。追问改写尚未实现，在两个入口均返回 501。最新启动与验收边界见 `ABC_INTEGRATION.md`。
+推荐AI入口为 `backend.a_ai_main:app`。首次生成使用v5，追问使用refine-core/0.1.3、refine-v2/review-v5；配置仍读取后端进程的模型环境变量。没有配置返回503，不自动使用回放或模拟文案。
 
-本轮只实现非 AI 后端。`backend.a_main:app` 的生成、追问接口均返回 HTTP 501；不会创建草稿、修改正文、增加版本或写入历史，不调用外部模型，也不需要密钥。
+## 已完成
 
-补充 fetch 后，最新 main 已包含 PR #3 的 B 模块 `backend/real_generator.py`、`backend/heritage_ai/` 和 C 格式的独立入口 `backend.real_app:app`。这些上游文件原样保留，本轮未启动该入口、未读取模型密钥、未调用真实模型。它们输出的是 C 格式，不能直接替代 A 的 `/generate` 或 `/refine`；A 仍是上述 501 行为。后续可由 B 增加 A 结构适配和真实追问实现，具体 B 协议见 `AI_GENERATOR.md`，本轮不把上游离线回放测试算作真实 AI 联调。
+- A原有生成与追问请求接入B核心，保留SQLite草稿、版本、历史、人工修改和导出。
+- 根据原资料与当前正文处理自然语言改写，重新检查来源编号、连续原文、语义支持及关键事实。
+- 缺票价时不编造30元或免费；模型漏引文时从提交正文检索候选，再独立核验，检索本身不等于有据。
+- 纯依据说明不改正文、不谎称重新核验；服务端保存可信最近六轮上下文。
+- 乐观版本冲突、总超时与迟到结果隔离，失败不覆盖原稿。
+- 真实模型普通/缺票价案例、Windows Edge网页补引文、人工保存、实际TXT下载与同库最新v5读取通过；166项后端离线测试通过。见[B真实验收](B_REFINE_REAL_ACCEPTANCE.md)。
 
-## 生成与自动核验
+## 保留边界
 
-`POST /api/generate` 接收 A 原有请求：
+- 非AI入口 `backend.a_main:app` 的生成、追问仍501，属于显式保留的兼容联调入口；旧C入口 `backend.main:app` 仍遵循原C接口和mock配置。
+- 网页“真实后端模式”表示走HTTP；真实AI还须核对响应real/live和元数据，不能单凭页面标签认定。
+- 真实资料检索补齐分支本轮未触发，只有离线回归覆盖；没有提供方日志或费用证明。
+- 窄屏布局、人工确认状态未随PUT保存、保存后需重新打开刷新claims、通用空引文提示等A既有边界未全面重做。
+- 原始资料仅由用户提交，不抓取链接，不证明来源本身真实，发布前仍需人工复核。
 
-```json
-{"material":"用户提供的原文资料", "requirement":"宣传需求", "platform":"xiaohongshu", "case_id":null}
-```
-
-当前响应：
-
-```json
-{"detail":{"code":"AI_NOT_IMPLEMENTED","message":"AI 功能暂未接入：文案生成与自动事实核验尚未实现，未创建或保存草稿。"}}
-```
-
-未来成功响应须为 A 格式完整草稿：`draft_id, version, created_at, updated_at, model, prompt_version, prompt_excerpt, notice, sources, segments, input, history`。`input` 保存原请求；`sources` 每条为 `{id,title,publisher,url,snippet}`；`segments` 每条为 `{id,type,label,text,claims}`；`claims` 每条为 `{id,anchor,status,cite_ids,quotes,reason,suggest}`，`quotes` 每条为 `{source_id,quote}`。核验状态为 `verified / needs_check / unsupported`。真实来源与引文必须可追溯；不得用示例结果当作模型结果。
-
-后续实现位置：`backend/a_main.py` 的 `generate`，接入 B 的服务层，验证输出结构、来源 ID 和逐字引文后再用独立的真实生成持久化方法写入 `a_drafts`。`Store.insert_manual` 仅供显式人工测试导入，不能作为真实 AI 已接入的替身。成功创建新编号，不覆盖旧稿。
-
-## 对话追问与重新核验
-
-`POST /api/drafts/{draft_id}/refine`：
-
-```json
-{"instruction":"把结尾缩短", "base_version":1, "segments":[{"id":"s1","text":"当前正文"}], "history":[]}
-```
-
-当前 HTTP 501：
-
-```json
-{"detail":{"code":"AI_NOT_IMPLEMENTED","message":"AI 功能暂未接入：对话追问改写与自动事实核验尚未实现，原草稿未修改。"}}
-```
-
-未来成功响应应提供 `{segments,history,version,saved_at,changed,removed_segments,applied,desc}`；其中 `changed`、`removed_segments` 为段落 ID 数组，`segments` 为含 claims 的完整分段对象。与 A 的 `frontend/src/stores/draft.js` 中 `refine` 对照接入，服务端应检查基线版本、保留旧版本并重新核对改动后的 anchor、引文与来源。后续位置为 `backend/a_main.py` 的 `refine` 和 B 的改写/核验服务；本轮没有实现改写规则或模型。
-
-自动事实核验没有独立的前端请求接口：它属于上述两项未来生成流程。当前读取和导出仅呈现已存资料，人工编辑将变更段落标为 `needs_check`，并附 `review_status=edited_needs_review`，不执行自动判断。A 的人工确认按钮只在浏览器修改 claim；原 PUT 请求不含 claims，后端不会根据历史文字推断核验结论。
-
-## 三种模式必须区分
-
-- A 原有“示例数据模式”：`VITE_USE_MOCK=true` 或页面“切换”，使用 `frontend/src/api/fixtures.js` 的预制结果和浏览器内存。前端保持原样，不是实际 AI，刷新会丢失内存草稿。
-- A 的“真实后端模式”：表示走 HTTP；本轮有列表、读取、解析、保存、历史和导出，**不表示 AI 已上线**。人工测试稿明确带非 AI 提示，普通空库不会自动出现假草稿。`/api/cases` 只返回案例输入，不含示例生成结果。
-- 原 C 入口 `backend.main:app`：仍遵循 `docs/API_CONTRACT.md`，默认 `mode=mock`。它与 A 的路由结构冲突，分别启动；不能把 C 模拟输出当作 A 的真实生成结果。
-
-接入后保持 A 的接口路径、原请求/响应字段和 `detail.code / detail.message` 错误结构；更改后新增覆盖版本冲突、失败回滚、引用有效性及未覆盖原稿的测试。
+启动与契约见[ABC接入说明](ABC_INTEGRATION.md)和[B追问说明](B_REFINE_INTEGRATION.md)。旧首次生成验收、旧离线基线及失败记录保留，真实与模拟结果分别报告。

@@ -31,6 +31,11 @@ def generate(payload: dict, *, model=None) -> dict:
     candidates = parse_draft(model.complete(
         stage="generate", system=_prompt("generate_v5.txt"),
         payload={**request, "mandatory_missing_fields": missing_questions}))
+    return verify_candidates(request, candidates, model, missing_questions)
+
+
+def verify_candidates(request, candidates, model, missing_questions):
+    """Shared exact/semantic checks for initial generation and later rewrites."""
     source_map = {s["id"]: s for s in request["sources"]}
     checked = {}
     for candidate in candidates:

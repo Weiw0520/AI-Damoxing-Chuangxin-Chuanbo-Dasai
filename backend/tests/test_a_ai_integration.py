@@ -62,8 +62,6 @@ def test_replay_create_edit_export_and_restart(tmp_path, price):
     assert edits[1]["text"] in exported["content"] and draft["segments"][1]["text"] not in exported["content"]
     assert "人工修改后待复核" in exported["content"]
     assert TestClient(create_ai_app(db, model_factory=factory)).get(url).json() == current
-    assert client.post(url + "/refine", json={"instruction": "缩短", "base_version": 2, "segments": edits}).status_code == 501
-    assert client.get(url).json() == current
     assert len(models) == 1 and models[0].calls == ["generate", "review"]
 
 
