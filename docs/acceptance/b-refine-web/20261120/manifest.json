@@ -1,0 +1,229 @@
+{
+  "started_at": "2026-11-19T18:48:14.709963+00:00",
+  "execution_mode": "live-required-browser",
+  "frontend_url": "http://127.0.0.1:5173",
+  "backend_base": "http://127.0.0.1:8000",
+  "code": {
+    "head": "ec50729155c150a0bb2ba74aa6913a45af843e16",
+    "branch": "feature/b-ai-refine",
+    "working_tree": "M README.md\n M backend/a_ai_main.py\n M backend/a_compat/ai.py\n M backend/a_compat/store.py\n M backend/a_main.py\n M backend/heritage_ai/__init__.py\n M backend/heritage_ai/generator.py\n M backend/tests/test_a_ai_integration.py\n M docs/ABC_INTEGRATION.md\n M docs/AI_TODO.md\n M docs/PROMPT_HISTORY.md\n M frontend/src/stores/draft.js\n?? backend/heritage_ai/prompts/refine_v1.txt\n?? backend/heritage_ai/prompts/refine_v2.txt\n?? backend/heritage_ai/refine_fixtures.py\n?? backend/heritage_ai/refiner.py\n?? backend/heritage_ai/retrieval.py\n?? backend/real_refiner.py\n?? backend/tests/test_refine_acceptance_tool.py\n?? backend/tests/test_refine_web_acceptance_tool.py\n?? backend/tests/test_refiner.py\n?? docs/B_REFINE_ACCEPTANCE_TOOL.md\n?? docs/B_REFINE_FIX_0_1_1.md\n?? docs/B_REFINE_FIX_0_1_2.md\n?? docs/B_REFINE_FIX_0_1_3.md\n?? docs/B_REFINE_INTEGRATION.md\n?? docs/B_REFINE_REAL_ACCEPTANCE.md\n?? docs/B_REFINE_VALIDATION.md\n?? docs/B_REFINE_WEB_ACCEPTANCE.md\n?? docs/acceptance/b-refine-real/\n?? examples/b_refine/\n?? scripts/requirements-web-acceptance.txt\n?? scripts/run_b_refine_acceptance.py\n?? scripts/run_b_refine_web_acceptance.cmd\n?? scripts/run_b_refine_web_acceptance.py",
+    "note": "HEAD只是当前提交；如有未提交改动，不能将HEAD单独视为已测试的新版本。以下文件哈希绑定本地源码。",
+    "source_sha256": {
+      "backend/a_ai_main.py": "a7166f5ff23f5ca5daf19784de0c0e7191ddb1d128a333d73c2cdbc5f72d7ea1",
+      "backend/a_main.py": "c1006a34b88fa338167fb64ba1a3296818f9efe90010708912bbbde4d90855eb",
+      "backend/a_compat/ai.py": "20cea35f621c30c4e845ed3139e8b158fa28a86b430a07ab8d80cfb0998080e8",
+      "backend/a_compat/store.py": "df857d6dde145fe470b331a364e6b7686a2d58d48f5425687ddefaa484600165",
+      "backend/heritage_ai/generator.py": "0cb7123406e543c8344746c3280632a6235f9bd9075c40633c5528991d17d5bf",
+      "backend/heritage_ai/refiner.py": "4e786a4e1cc5e2172c6e5c8832666753b34e338efa8467c164c4127d9f558fbe",
+      "backend/heritage_ai/retrieval.py": "d6d75f03423fea69f6443e8cfea0953e00a0a5f695442481cf5bebd02fca84c7",
+      "backend/heritage_ai/model.py": "f4dd2d4a50511f15693965ce090fdc2f9e6a34a120fd074aa6c5b83a55a63868",
+      "backend/heritage_ai/validation.py": "66bf3efabddb205b2e0d65aa968189ea5fcf59a1f5943811d16ce537c4a3b7ce",
+      "backend/heritage_ai/evidence.py": "51ded234e708c439ab461e9642782d354f86b4790479d34fdc114ad0bd0e4c54",
+      "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+      "backend/heritage_ai/prompts/refine_v2.txt": "d34a2ba717b66bfd2f77d691a5ee2d8b2e92513f58cd13fba50447d4a4b0c721",
+      "backend/heritage_ai/prompts/review_v5.txt": "346d116a75a5ad269d8a2e8857d9bff0196256793d717cd370f559bff1b46a34",
+      "frontend/src/stores/draft.js": "ea734b5b2a183babe41c5ea5dc1aad0abfcb6a2bfe66e4d99bdb05231e0c1f59"
+    },
+    "source_lf_sha256": {
+      "backend/a_ai_main.py": "3848893d4987867d3dfc5111d842e2618212f9198edbeaf979453ff99ad8fd30",
+      "backend/a_main.py": "ad325189cf3498012c63305ba92edf84d765b04b169609d7f036a3f7f2882dd3",
+      "backend/a_compat/ai.py": "f84d230eeed0f05ac330d12efe05c986706aca133801936f298ca3fcdddee99c",
+      "backend/a_compat/store.py": "f093c50994b14b481aba44318c4be7066525e34ccc2786dbcaca8f28d1d2e7df",
+      "backend/heritage_ai/generator.py": "a50b3bd6cab4c1c96fde6b183b9a6d2f1ed7a9fb081c2a14b0a121a30f12a57a",
+      "backend/heritage_ai/refiner.py": "4e786a4e1cc5e2172c6e5c8832666753b34e338efa8467c164c4127d9f558fbe",
+      "backend/heritage_ai/retrieval.py": "d6d75f03423fea69f6443e8cfea0953e00a0a5f695442481cf5bebd02fca84c7",
+      "backend/heritage_ai/model.py": "c2b0c6a03b902c0f1c2a2aeacbb452a92eaa2ad9d41bc62a0001e5ba49581f99",
+      "backend/heritage_ai/validation.py": "0a72ae0d64d5296d7fbc5b170f73acfec7674ec3f246d12dd935e7657492881a",
+      "backend/heritage_ai/evidence.py": "92f0ac0740ed9931e85327fa3da1608d616deb03d75d0e13a98860903fc3d94b",
+      "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+      "backend/heritage_ai/prompts/refine_v2.txt": "d34a2ba717b66bfd2f77d691a5ee2d8b2e92513f58cd13fba50447d4a4b0c721",
+      "backend/heritage_ai/prompts/review_v5.txt": "d4bee1aae196569b65c3b22ff72bcf2cc563e153205d02ca5d88e85f7eb7c999",
+      "frontend/src/stores/draft.js": "222d4023995128719a602b021b52726844e835cbf69eaf642ccc6c4902e05782"
+    }
+  },
+  "tool_sha256": "31c759202203c1a5c7a638227e569b8f390801c158eb3dfbc6527dcc1b3c8fcd",
+  "steps": [
+    {
+      "name": "price.preflight",
+      "method": "GET",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "http_status": 200,
+      "elapsed_seconds": 0.0088,
+      "time": "2026-11-19T18:48:14.935551+00:00",
+      "response_file": "price.preflight.response.json"
+    },
+    {
+      "name": "price.open",
+      "method": "GET",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "http_status": 200,
+      "elapsed_seconds": 0.0108,
+      "time": "2026-11-19T18:48:18.665980+00:00",
+      "response_file": "price.open.response.json"
+    },
+    {
+      "name": "price.refine",
+      "method": "POST",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d/refine",
+      "http_status": 200,
+      "elapsed_seconds": 16.9749,
+      "time": "2026-11-19T18:48:35.863715+00:00",
+      "response_file": "price.refine.response.json",
+      "request_file": "price.refine.request.json"
+    },
+    {
+      "name": "price.save",
+      "method": "PUT",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "http_status": 200,
+      "elapsed_seconds": 0.0164,
+      "time": "2026-11-19T18:48:38.155923+00:00",
+      "response_file": "price.save.response.json",
+      "request_file": "price.save.request.json"
+    },
+    {
+      "name": "price.after-ui-save",
+      "method": "GET",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "http_status": 200,
+      "elapsed_seconds": 0.0109,
+      "time": "2026-11-19T18:48:38.492955+00:00",
+      "response_file": "price.after-ui-save.response.json"
+    },
+    {
+      "name": "price.export",
+      "method": "POST",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d/export",
+      "http_status": 200,
+      "elapsed_seconds": 0.0079,
+      "time": "2026-11-19T18:48:39.024048+00:00",
+      "response_file": "price.export.response.json",
+      "request_file": "price.export.request.json"
+    },
+    {
+      "name": "normal.open",
+      "method": "GET",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf",
+      "http_status": 200,
+      "elapsed_seconds": 0.0667,
+      "time": "2026-11-19T18:48:39.928747+00:00",
+      "response_file": "normal.open.response.json"
+    },
+    {
+      "name": "normal.export",
+      "method": "POST",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf/export",
+      "http_status": 200,
+      "elapsed_seconds": 0.012,
+      "time": "2026-11-19T18:48:40.147943+00:00",
+      "response_file": "normal.export.response.json",
+      "request_file": "normal.export.request.json"
+    },
+    {
+      "name": "price.final-open",
+      "method": "GET",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "http_status": 200,
+      "elapsed_seconds": 0.0073,
+      "time": "2026-11-19T18:48:40.660353+00:00",
+      "response_file": "price.final-open.response.json"
+    },
+    {
+      "name": "price.after-restart",
+      "method": "GET",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "http_status": 200,
+      "elapsed_seconds": 0.0355,
+      "time": "2026-11-19T18:53:18.051477+00:00",
+      "response_file": "price.after-restart.response.json"
+    },
+    {
+      "name": "normal.after-restart",
+      "method": "GET",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf",
+      "http_status": 200,
+      "elapsed_seconds": 0.021,
+      "time": "2026-11-19T18:53:18.076193+00:00",
+      "response_file": "normal.after-restart.response.json"
+    }
+  ],
+  "checks": [
+    {
+      "name": "web-followup-evidence-manual-save-and-real-download",
+      "result": "pass"
+    }
+  ],
+  "snapshots": {
+    "price": {
+      "draft_id": "A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "file": "price.after-ui-save.response.json",
+      "version": 5
+    },
+    "normal": {
+      "draft_id": "A-2915de965544475a8d3e1ef9c06f5bbf",
+      "file": "normal.open.response.json",
+      "version": 5
+    }
+  },
+  "downloads": {
+    "price": {
+      "file": "downloads/A-8701e2e8f13d485da02ba8ec2518fa9d_v5.txt",
+      "draft_id": "A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "version": 5,
+      "bytes": 705,
+      "sha256": "1d7190f5b0f42cba810be9336d4913bb7a1fa379e57b5adfbd638c90a4c34781",
+      "utf8_bom": true,
+      "matches_export_content": true
+    },
+    "normal": {
+      "file": "downloads/A-2915de965544475a8d3e1ef9c06f5bbf_v5.txt",
+      "draft_id": "A-2915de965544475a8d3e1ef9c06f5bbf",
+      "version": 5,
+      "bytes": 492,
+      "sha256": "d197447012b82a351a558290750f8d1a1e2b64289a2378dfee9e61c32530dca9",
+      "utf8_bom": true,
+      "matches_export_content": true
+    }
+  },
+  "status": "browser-checks-completed",
+  "semantic_review": "待审阅全部JSON与截图；确定性检查不替代整段语义复核。",
+  "restart_read": "passed",
+  "provider_logs": "未采集，不以mode单独证明提供方调用。",
+  "scope": "仅操作原验收记录中的普通、新票价两份草稿；只发一次网页AI追问，人工保存也通过页面。",
+  "browser_channel": "msedge",
+  "browser_version": "151.0.4129.101",
+  "playwright_version": "1.62.0",
+  "refine_ai_meta": {
+    "mode": "live",
+    "operation": "rewrite",
+    "pipeline_version": "refine-core/0.1.3",
+    "prompt_version": "refine-v2/review-v5",
+    "refine_prompt_version": "refine-v2",
+    "review_prompt_version": "v5",
+    "review_executed": true,
+    "candidate_normalizations": [],
+    "evidence_retrieval": [],
+    "model": "qwen4-max",
+    "verify_model": "qwen4-max",
+    "generated_at": "2026-11-19T18:48:35.823827+00:00",
+    "input_sha256": "f86e16591a4398a7853f4a1ec75172769ce571dbe4ecfe5a52699ea919182bbc"
+  },
+  "ai_text_changes": [],
+  "screenshots": [
+    "price.p2-evidence.png",
+    "price.p2-quote-1.png",
+    "price.p2-quote-2.png",
+    "price.ticket-review.png",
+    "price.manual-needs-review.png",
+    "price.download-view.png",
+    "normal.download-view.png",
+    "price.final-body.png"
+  ],
+  "manual_edit": {
+    "segment_id": "P1",
+    "sentence": "出发前，我会再次核实门票信息。",
+    "version": 5
+  },
+  "finished_at": "2026-11-19T18:53:18.521442+00:00",
+  "restart_operator_note": "重启由操作者在原后端终端执行；脚本验证最新快照一致，不能独立证明重启动作。"
+}

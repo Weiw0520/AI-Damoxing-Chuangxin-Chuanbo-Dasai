@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, Request
+from fastapi import HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -46,13 +47,13 @@ class GenerateInput(InputModel):
 
 
 class RefineInput(InputModel):
-    instruction: str
+    instruction: str = Field(min_length=1, max_length=2000)
     base_version: int = Field(ge=0)
-    segments: list[SegmentEdit]
+    segments: list[SegmentEdit] = Field(min_length=1, max_length=24)
     history: list[dict] = Field(default_factory=list)
 
 
-def create_a_app(db_path=None, *, draft_generator=None, generation_timeout=45):
+def create_a_app(db_path=None, *, draft_generator=None, draft_refiner=None, generation_timeout=45):
     store = Store(db_path)
     app = FastAPI(title="A 原版前端非 AI 兼容后端", version="0.1.0")
     app.state.store = store
@@ -99,9 +100,23 @@ def create_a_app(db_path=None, *, draft_generator=None, generation_timeout=45):
         store.insert_generated(draft)
         return draft
 
-    @app.post("/api/drafts/{draft_id}/refine", status_code=501)
-    def refine(draft_id: str, payload: RefineInput):
-        raise failure(501, "AI_NOT_IMPLEMENTED", "AI 功能暂未接入：对话追问改写与自动事实核验尚未实现，原草稿未修改。")
+    @app.post("/api/drafts/{draft_id}/refine", status_code=501 if draft_refiner is None else 200)
+    async def refine(draft_id: str, payload: RefineInput):
+        if draft_refiner is None:
+            raise failure(501, "AI_NOT_IMPLEMENTED", "AI 功能暂未接入：对话追问改写与自动事实核验尚未实现，原草稿未修改。")
+        snapshot = store.refine_snapshot(draft_id, payload)
+        deadline = time.monotonic() + generation_timeout
+        try:
+            candidate = await asyncio.wait_for(
+                asyncio.to_thread(draft_refiner, snapshot, payload, deadline), generation_timeout)
+        except TimeoutError:
+            raise failure(504, "AI_TIMEOUT", "追问改写或核验超时，原草稿未修改；请稍后重试。") from None
+        except HTTPException:
+            raise
+        except Exception:
+            raise failure(502, "AI_REFINEMENT_FAILED", "追问处理失败，原草稿未修改；请稍后重试。") from None
+        # No worker can write. Recheck the version after the potentially slow model call.
+        return store.commit_refine(draft_id, snapshot["version"], payload, candidate, deadline)
 
     @app.post("/api/extract")
     async def extract_file(request: Request, filename: str):

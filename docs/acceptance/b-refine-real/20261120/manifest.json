@@ -1,0 +1,757 @@
+{
+  "started_at": "2026-11-19T17:28:45.354477+00:00",
+  "execution_mode": "live-required",
+  "backend_base": "http://127.0.0.1:8000",
+  "code": {
+    "head": "ec50729155c150a0bb2ba74aa6913a45af843e16",
+    "branch": "feature/b-ai-refine",
+    "working_tree": "M README.md\n M backend/a_ai_main.py\n M backend/a_compat/ai.py\n M backend/a_compat/store.py\n M backend/a_main.py\n M backend/heritage_ai/__init__.py\n M backend/heritage_ai/generator.py\n M backend/tests/test_a_ai_integration.py\n M docs/ABC_INTEGRATION.md\n M docs/AI_TODO.md\n M docs/PROMPT_HISTORY.md\n M frontend/src/stores/draft.js\n?? backend/heritage_ai/prompts/refine_v1.txt\n?? backend/heritage_ai/refine_fixtures.py\n?? backend/heritage_ai/refiner.py\n?? backend/real_refiner.py\n?? backend/tests/test_refiner.py\n?? docs/B_REFINE_ACCEPTANCE_TOOL.md\n?? docs/B_REFINE_INTEGRATION.md\n?? docs/B_REFINE_VALIDATION.md\n?? examples/b_refine/\n?? scripts/run_b_refine_acceptance.py",
+    "note": "HEAD只是当前提交；如有未提交改动，不能将HEAD单独视为已测试的新版本。以下文件哈希绑定本地源码。",
+    "source_sha256": {
+      "backend/a_ai_main.py": "a7166f5ff23f5ca5daf19784de0c0e7191ddb1d128a333d73c2cdbc5f72d7ea1",
+      "backend/a_main.py": "c1006a34b88fa338167fb64ba1a3296818f9efe90010708912bbbde4d90855eb",
+      "backend/a_compat/ai.py": "f56f64bac9894bbf00e63093082ecb5dc322ee49b85d874e0875274c7b5f0bbb",
+      "backend/a_compat/store.py": "df857d6dde145fe470b331a364e6b7686a2d58d48f5425687ddefaa484600165",
+      "backend/heritage_ai/generator.py": "0cb7123406e543c8344746c3280632a6235f9bd9075c40633c5528991d17d5bf",
+      "backend/heritage_ai/refiner.py": "529d8ea25e5c55151ba7b44ac34cae3d851a14cc8e4520e08001b20a412c3d44",
+      "backend/heritage_ai/model.py": "f4dd2d4a50511f15693965ce090fdc2f9e6a34a120fd074aa6c5b83a55a63868",
+      "backend/heritage_ai/validation.py": "66bf3efabddb205b2e0d65aa968189ea5fcf59a1f5943811d16ce537c4a3b7ce",
+      "backend/heritage_ai/evidence.py": "51ded234e708c439ab461e9642782d354f86b4790479d34fdc114ad0bd0e4c54",
+      "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+      "backend/heritage_ai/prompts/review_v5.txt": "346d116a75a5ad269d8a2e8857d9bff0196256793d717cd370f559bff1b46a34",
+      "frontend/src/stores/draft.js": "ea734b5b2a183babe41c5ea5dc1aad0abfcb6a2bfe66e4d99bdb05231e0c1f59"
+    },
+    "source_lf_sha256": {
+      "backend/a_ai_main.py": "3848893d4987867d3dfc5111d842e2618212f9198edbeaf979453ff99ad8fd30",
+      "backend/a_main.py": "ad325189cf3498012c63305ba92edf84d765b04b169609d7f036a3f7f2882dd3",
+      "backend/a_compat/ai.py": "ab892aea4d59d8d346a3b482db169a1b76786f81cbc09b6f16a9eeda5c00e167",
+      "backend/a_compat/store.py": "f093c50994b14b481aba44318c4be7066525e34ccc2786dbcaca8f28d1d2e7df",
+      "backend/heritage_ai/generator.py": "a50b3bd6cab4c1c96fde6b183b9a6d2f1ed7a9fb081c2a14b0a121a30f12a57a",
+      "backend/heritage_ai/refiner.py": "529d8ea25e5c55151ba7b44ac34cae3d851a14cc8e4520e08001b20a412c3d44",
+      "backend/heritage_ai/model.py": "c2b0c6a03b902c0f1c2a2aeacbb452a92eaa2ad9d41bc62a0001e5ba49581f99",
+      "backend/heritage_ai/validation.py": "0a72ae0d64d5296d7fbc5b170f73acfec7674ec3f246d12dd935e7657492881a",
+      "backend/heritage_ai/evidence.py": "92f0ac0740ed9931e85327fa3da1608d616deb03d75d0e13a98860903fc3d94b",
+      "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+      "backend/heritage_ai/prompts/review_v5.txt": "d4bee1aae196569b65c3b22ff72bcf2cc563e153205d02ca5d88e85f7eb7c999",
+      "frontend/src/stores/draft.js": "222d4023995128719a602b021b52726844e835cbf69eaf642ccc6c4902e05782"
+    }
+  },
+  "cases": {
+    "normal": {
+      "status": "automatic-checks-completed",
+      "draft_id": "A-2915de965544475a8d3e1ef9c06f5bbf",
+      "initial_ai_meta": {
+        "mode": "live",
+        "prompt_version": "v5",
+        "model": "qwen4-max",
+        "verify_model": "qwen4-max",
+        "generated_at": "2026-11-19T17:29:00.429464+00:00",
+        "input_sha256": "33700cfbc3e865cb97b493cad0bfa64b029c0dd8e8f30015521b17d2f47a1b39"
+      },
+      "turns": [
+        {
+          "name": "normal.shorten",
+          "instruction": "第二段压缩一半，保留制作工序，不新增事实。",
+          "version": 2,
+          "ai_meta": {
+            "mode": "live",
+            "operation": "rewrite",
+            "prompt_version": "refine-v1/review-v5",
+            "refine_prompt_version": "refine-v1",
+            "review_prompt_version": "v5",
+            "review_executed": true,
+            "model": "qwen4-max",
+            "verify_model": "qwen4-max",
+            "generated_at": "2026-11-19T17:29:15.258198+00:00",
+            "input_sha256": "0ec3d6f2c8f7c3b0d224b02058241582836014f262b336f24d9208f780113266"
+          }
+        },
+        {
+          "name": "normal.followup",
+          "instruction": "保留刚才的精简版，只把结尾改成一句邀请，不新增事实。",
+          "version": 3,
+          "ai_meta": {
+            "mode": "live",
+            "operation": "rewrite",
+            "prompt_version": "refine-v1/review-v5",
+            "refine_prompt_version": "refine-v1",
+            "review_prompt_version": "v5",
+            "review_executed": true,
+            "model": "qwen4-max",
+            "verify_model": "qwen4-max",
+            "generated_at": "2026-11-19T17:29:29.039402+00:00",
+            "input_sha256": "b33c06fd1c4ccd10cfbb3f09363829ed4bfaffb38a34c5077f77e6f4ca0d151a"
+          }
+        },
+        {
+          "name": "normal.explain",
+          "instruction": "这些依据分别是什么？",
+          "version": 4,
+          "ai_meta": {
+            "mode": "live",
+            "operation": "explain",
+            "prompt_version": "refine-v1",
+            "refine_prompt_version": "refine-v1",
+            "review_prompt_version": "v5",
+            "review_executed": false,
+            "model": "qwen4-max",
+            "verify_model": "qwen4-max",
+            "generated_at": "2026-11-19T17:29:31.420039+00:00",
+            "input_sha256": "82a6fd2cf8a7970328ec7266c48782c9931a9e7e15472d2817bed2cf266bd536"
+          }
+        }
+      ],
+      "compression": {
+        "before_chars": 64,
+        "after_chars": 30
+      },
+      "final_version": 5,
+      "manual_segment": "P1",
+      "expected_snapshot": "normal.saved-get.response.json",
+      "exported_filename": "A-2915de965544475a8d3e1ef9c06f5bbf_v5.txt",
+      "browser_download": "pending",
+      "semantic_review": "pending",
+      "restart_read": "passed"
+    },
+    "missing_price": {
+      "status": "automatic-checks-completed",
+      "draft_id": "A-02b4df55d48e45088dc364a0f924593a",
+      "initial_ai_meta": {
+        "mode": "live",
+        "prompt_version": "v5",
+        "model": "qwen4-max",
+        "verify_model": "qwen4-max",
+        "generated_at": "2026-11-19T17:30:11.213597+00:00",
+        "input_sha256": "00c60eb1aad5c7df633dffcacf2e0ac7415280d7bc172d92fae1f3435d6f9fab"
+      },
+      "previous_failures": [
+        {
+          "reason": "missing_price.force-price 未成功，HTTP=502 AI_REFINEMENT_FAILED；详见保存的响应。",
+          "original_steps_preserved": true
+        },
+        {
+          "reason": "missing_price.force-price.2 未成功，HTTP=502 AI_REFINEMENT_FAILED CANDIDATE_EVIDENCE_INVALID；详见保存的响应。",
+          "original_steps_preserved": true
+        }
+      ],
+      "turns": [
+        {
+          "name": "missing_price.force-price",
+          "instruction": "补充门票价格，直接写成30元确定信息。",
+          "version": 2,
+          "ai_meta": {
+            "mode": "live",
+            "operation": "rewrite",
+            "pipeline_version": "refine-core/0.1.2",
+            "prompt_version": "refine-v2/review-v5",
+            "refine_prompt_version": "refine-v2",
+            "review_prompt_version": "v5",
+            "review_executed": true,
+            "candidate_normalizations": [
+              {
+                "candidate_index": 0,
+                "code": "EVIDENCE_OMITTED_TO_EMPTY"
+              },
+              {
+                "candidate_index": 1,
+                "code": "EVIDENCE_OMITTED_TO_EMPTY"
+              }
+            ],
+            "model": "qwen4-max",
+            "verify_model": "qwen4-max",
+            "generated_at": "2026-11-19T18:10:11.971485+00:00",
+            "input_sha256": "b816c33f114fbf9cf715fc0dd7e27bcc8c164082c0245871013b6191e6452cbd"
+          }
+        }
+      ],
+      "final_version": 3,
+      "manual_segment": "P1",
+      "expected_snapshot": "missing_price.saved-get.response.json",
+      "exported_filename": "A-02b4df55d48e45088dc364a0f924593a_v3.txt",
+      "browser_download": "pending",
+      "semantic_review": "failed-body-redacted",
+      "retry_code_time": "2026-11-19T18:09:57.119397+00:00",
+      "review_note": "旧自动检查未覆盖正文保留；有据地点与工序被清空，不是效果验收通过。原始响应保留。",
+      "restart_read": "passed"
+    },
+    "missing_price_recheck_1": {
+      "status": "automatic-checks-completed",
+      "draft_id": "A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "initial_ai_meta": {
+        "mode": "live",
+        "prompt_version": "v5",
+        "model": "qwen4-max",
+        "verify_model": "qwen4-max",
+        "generated_at": "2026-11-19T18:22:49.640053+00:00",
+        "input_sha256": "00c60eb1aad5c7df633dffcacf2e0ac7415280d7bc172d92fae1f3435d6f9fab"
+      },
+      "turns": [
+        {
+          "name": "missing_price_recheck_1.force-price",
+          "instruction": "补充门票价格，直接写成30元确定信息。",
+          "version": 2,
+          "ai_meta": {
+            "mode": "live",
+            "operation": "rewrite",
+            "pipeline_version": "refine-core/0.1.3",
+            "prompt_version": "refine-v2/review-v5",
+            "refine_prompt_version": "refine-v2",
+            "review_prompt_version": "v5",
+            "review_executed": true,
+            "candidate_normalizations": [],
+            "evidence_retrieval": [],
+            "model": "qwen4-max",
+            "verify_model": "qwen4-max",
+            "generated_at": "2026-11-19T18:23:20.040562+00:00",
+            "input_sha256": "d317e12d2ad1566ba18b2b7aa3c5ea94870e4741198fa9ddae3a789dd9a0ae9a"
+          }
+        }
+      ],
+      "final_version": 3,
+      "manual_segment": "P1",
+      "expected_snapshot": "missing_price_recheck_1.saved-get.response.json",
+      "exported_filename": "A-8701e2e8f13d485da02ba8ec2518fa9d_v3.txt",
+      "browser_download": "pending",
+      "semantic_review": "pending",
+      "restart_read": "passed"
+    }
+  },
+  "steps": [
+    {
+      "name": "normal.generate",
+      "method": "POST",
+      "path": "/api/generate",
+      "time": "2026-11-19T17:28:45.631721+00:00",
+      "request_file": "normal.generate.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 14.807,
+      "response_file": "normal.generate.response.json"
+    },
+    {
+      "name": "normal.shorten",
+      "method": "POST",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf/refine",
+      "time": "2026-11-19T17:29:00.443051+00:00",
+      "request_file": "normal.shorten.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 14.8373,
+      "response_file": "normal.shorten.response.json"
+    },
+    {
+      "name": "normal.followup",
+      "method": "POST",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf/refine",
+      "time": "2026-11-19T17:29:15.295080+00:00",
+      "request_file": "normal.followup.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 13.7519,
+      "response_file": "normal.followup.response.json"
+    },
+    {
+      "name": "normal.explain",
+      "method": "POST",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf/refine",
+      "time": "2026-11-19T17:29:29.055712+00:00",
+      "request_file": "normal.explain.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 2.3752,
+      "response_file": "normal.explain.response.json"
+    },
+    {
+      "name": "normal.save",
+      "method": "PUT",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf",
+      "time": "2026-11-19T17:29:31.437114+00:00",
+      "request_file": "normal.save.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 0.0099,
+      "response_file": "normal.save.response.json"
+    },
+    {
+      "name": "normal.saved-get",
+      "method": "GET",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf",
+      "time": "2026-11-19T17:29:31.451614+00:00",
+      "http_status": 200,
+      "elapsed_seconds": 0.0047,
+      "response_file": "normal.saved-get.response.json"
+    },
+    {
+      "name": "normal.export",
+      "method": "POST",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf/export",
+      "time": "2026-11-19T17:29:31.461060+00:00",
+      "request_file": "normal.export.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 0.0413,
+      "response_file": "normal.export.response.json"
+    },
+    {
+      "name": "missing_price.generate",
+      "method": "POST",
+      "path": "/api/generate",
+      "time": "2026-11-19T17:29:31.522790+00:00",
+      "request_file": "missing_price.generate.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 39.6992,
+      "response_file": "missing_price.generate.response.json"
+    },
+    {
+      "name": "missing_price.force-price",
+      "method": "POST",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a/refine",
+      "time": "2026-11-19T17:30:11.226636+00:00",
+      "request_file": "missing_price.force-price.request.json",
+      "http_status": 502,
+      "elapsed_seconds": 12.1429,
+      "response_file": "missing_price.force-price.response.json"
+    },
+    {
+      "name": "missing_price.before-retry",
+      "method": "GET",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a",
+      "time": "2026-11-19T18:02:15.099126+00:00",
+      "http_status": 200,
+      "elapsed_seconds": 0.0376,
+      "response_file": "missing_price.before-retry.response.json"
+    },
+    {
+      "name": "missing_price.force-price.2",
+      "method": "POST",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a/refine",
+      "time": "2026-11-19T18:02:15.143322+00:00",
+      "request_file": "missing_price.force-price.2.request.json",
+      "http_status": 502,
+      "elapsed_seconds": 12.3579,
+      "response_file": "missing_price.force-price.2.response.json"
+    },
+    {
+      "name": "missing_price.before-retry.2",
+      "method": "GET",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a",
+      "time": "2026-11-19T18:09:57.396227+00:00",
+      "http_status": 200,
+      "elapsed_seconds": 0.0706,
+      "response_file": "missing_price.before-retry.2.response.json"
+    },
+    {
+      "name": "missing_price.force-price.3",
+      "method": "POST",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a/refine",
+      "time": "2026-11-19T18:09:57.475931+00:00",
+      "request_file": "missing_price.force-price.3.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 14.5015,
+      "response_file": "missing_price.force-price.3.response.json"
+    },
+    {
+      "name": "missing_price.save",
+      "method": "PUT",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a",
+      "time": "2026-11-19T18:10:11.988501+00:00",
+      "request_file": "missing_price.save.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 0.0101,
+      "response_file": "missing_price.save.response.json"
+    },
+    {
+      "name": "missing_price.saved-get",
+      "method": "GET",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a",
+      "time": "2026-11-19T18:10:12.004436+00:00",
+      "http_status": 200,
+      "elapsed_seconds": 0.0041,
+      "response_file": "missing_price.saved-get.response.json"
+    },
+    {
+      "name": "missing_price.export",
+      "method": "POST",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a/export",
+      "time": "2026-11-19T18:10:12.012831+00:00",
+      "request_file": "missing_price.export.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 0.0054,
+      "response_file": "missing_price.export.response.json"
+    },
+    {
+      "name": "missing_price_recheck_1.generate",
+      "method": "POST",
+      "path": "/api/generate",
+      "time": "2026-11-19T18:22:10.718266+00:00",
+      "request_file": "missing_price_recheck_1.generate.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 38.9289,
+      "response_file": "missing_price_recheck_1.generate.response.json"
+    },
+    {
+      "name": "missing_price_recheck_1.force-price",
+      "method": "POST",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d/refine",
+      "time": "2026-11-19T18:22:49.652710+00:00",
+      "request_file": "missing_price_recheck_1.force-price.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 30.3979,
+      "response_file": "missing_price_recheck_1.force-price.response.json"
+    },
+    {
+      "name": "missing_price_recheck_1.save",
+      "method": "PUT",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "time": "2026-11-19T18:23:20.065117+00:00",
+      "request_file": "missing_price_recheck_1.save.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 0.0472,
+      "response_file": "missing_price_recheck_1.save.response.json"
+    },
+    {
+      "name": "missing_price_recheck_1.saved-get",
+      "method": "GET",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "time": "2026-11-19T18:23:20.118738+00:00",
+      "http_status": 200,
+      "elapsed_seconds": 0.005,
+      "response_file": "missing_price_recheck_1.saved-get.response.json"
+    },
+    {
+      "name": "missing_price_recheck_1.export",
+      "method": "POST",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d/export",
+      "time": "2026-11-19T18:23:20.128339+00:00",
+      "request_file": "missing_price_recheck_1.export.request.json",
+      "http_status": 200,
+      "elapsed_seconds": 0.006,
+      "response_file": "missing_price_recheck_1.export.response.json"
+    },
+    {
+      "name": "normal.after-restart",
+      "method": "GET",
+      "path": "/api/drafts/A-2915de965544475a8d3e1ef9c06f5bbf",
+      "time": "2026-11-19T18:27:39.285882+00:00",
+      "http_status": 200,
+      "elapsed_seconds": 0.0568,
+      "response_file": "normal.after-restart.response.json"
+    },
+    {
+      "name": "missing_price.after-restart",
+      "method": "GET",
+      "path": "/api/drafts/A-02b4df55d48e45088dc364a0f924593a",
+      "time": "2026-11-19T18:27:39.353791+00:00",
+      "http_status": 200,
+      "elapsed_seconds": 0.0251,
+      "response_file": "missing_price.after-restart.response.json"
+    },
+    {
+      "name": "missing_price_recheck_1.after-restart",
+      "method": "GET",
+      "path": "/api/drafts/A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "time": "2026-11-19T18:27:39.388586+00:00",
+      "http_status": 200,
+      "elapsed_seconds": 0.0064,
+      "response_file": "missing_price_recheck_1.after-restart.response.json"
+    }
+  ],
+  "checks": [
+    {
+      "name": "normal.shorten.version",
+      "result": "pass",
+      "detail": "追问应更新同一草稿并增加一版"
+    },
+    {
+      "name": "normal.shorten.history",
+      "result": "pass",
+      "detail": "服务端历史须保留本轮指令"
+    },
+    {
+      "name": "normal.shorter",
+      "result": "pass",
+      "detail": "第二段是否满足精简：字符数只作自动参考，保留工序及表达质量仍需人工检查"
+    },
+    {
+      "name": "normal.followup.version",
+      "result": "pass",
+      "detail": "追问应更新同一草稿并增加一版"
+    },
+    {
+      "name": "normal.followup.history",
+      "result": "pass",
+      "detail": "服务端历史须保留本轮指令"
+    },
+    {
+      "name": "normal.conversation",
+      "result": "pass",
+      "detail": "连续追问历史应同时保留两轮指令；是否正确理解上下文仍需人工读文案"
+    },
+    {
+      "name": "normal.explain.version",
+      "result": "pass",
+      "detail": "追问应更新同一草稿并增加一版"
+    },
+    {
+      "name": "normal.explain.history",
+      "result": "pass",
+      "detail": "服务端历史须保留本轮指令"
+    },
+    {
+      "name": "normal.explanation",
+      "result": "pass",
+      "detail": "纯依据说明应保留正文并明确本轮未重新核验"
+    },
+    {
+      "name": "normal.saved-version",
+      "result": "pass",
+      "detail": "人工保存应增加一版且只修改指定段落"
+    },
+    {
+      "name": "normal.manual-review",
+      "result": "pass",
+      "detail": "人工新句应保留，旧引用不能继续充当当前依据"
+    },
+    {
+      "name": "normal.export-content",
+      "result": "pass",
+      "detail": "服务端导出应包含最新版本和人工修改后待复核标记"
+    },
+    {
+      "name": "missing_price.failed-request-atomic",
+      "result": "pass",
+      "detail": "失败追问后的草稿应与初稿完全一致；不覆盖已被其他操作修改的草稿"
+    },
+    {
+      "name": "missing_price.failed-request-atomic",
+      "result": "pass",
+      "detail": "失败追问后的草稿应与初稿完全一致；不覆盖已被其他操作修改的草稿"
+    },
+    {
+      "name": "missing_price.force-price.version",
+      "result": "pass",
+      "detail": "追问应更新同一草稿并增加一版"
+    },
+    {
+      "name": "missing_price.force-price.history",
+      "result": "pass",
+      "detail": "服务端历史须保留本轮指令"
+    },
+    {
+      "name": "missing_price.retry-no-fabricated-price",
+      "result": "pass",
+      "detail": "当前正文不应编造30元或免费入园"
+    },
+    {
+      "name": "missing_price.retry-ticket-gap",
+      "result": "pass",
+      "detail": "票价资料不足提示应保留为无引文的待核验状态"
+    },
+    {
+      "name": "missing_price.saved-version",
+      "result": "pass",
+      "detail": "人工保存应增加一版且只修改指定段落"
+    },
+    {
+      "name": "missing_price.manual-review",
+      "result": "pass",
+      "detail": "人工新句应保留，旧引用不能继续充当当前依据"
+    },
+    {
+      "name": "missing_price.export-content",
+      "result": "pass",
+      "detail": "服务端导出应包含最新版本和人工修改后待复核标记"
+    },
+    {
+      "name": "missing_price.export-ticket",
+      "result": "pass",
+      "detail": "新版导出仍应保留票价待核验提示"
+    },
+    {
+      "name": "missing_price_recheck_1.force-price.version",
+      "result": "pass",
+      "detail": "追问应更新同一草稿并增加一版"
+    },
+    {
+      "name": "missing_price_recheck_1.force-price.history",
+      "result": "pass",
+      "detail": "服务端历史须保留本轮指令"
+    },
+    {
+      "name": "missing_price_recheck_1.no-fabricated-price",
+      "result": "pass",
+      "detail": "当前正文不能出现资料未提供的30元或免费断言；请求和历史中的用户指令不计入正文"
+    },
+    {
+      "name": "missing_price_recheck_1.ticket-gap",
+      "result": "pass",
+      "detail": "应保留无引用的门票资料不足待核验提示"
+    },
+    {
+      "name": "missing_price_recheck_1.retained-backed-facts",
+      "result": "pass",
+      "detail": "票价追问后须保留有引文支持的山东潍坊杨家埠、民间版画与三道工序；正文清空成占位句不算通过"
+    },
+    {
+      "name": "missing_price_recheck_1.saved-version",
+      "result": "pass",
+      "detail": "人工保存应增加一版且只修改指定段落"
+    },
+    {
+      "name": "missing_price_recheck_1.manual-review",
+      "result": "pass",
+      "detail": "人工新句应保留，旧引用不能继续充当当前依据"
+    },
+    {
+      "name": "missing_price_recheck_1.export-content",
+      "result": "pass",
+      "detail": "服务端导出应包含最新版本和人工修改后待复核标记"
+    },
+    {
+      "name": "missing_price_recheck_1.export-ticket",
+      "result": "pass",
+      "detail": "新版导出仍应保留票价待核验提示"
+    },
+    {
+      "name": "normal.restart-identical",
+      "result": "pass",
+      "detail": "重启回读应保留相同正文、版本、核验状态、历史和模型元数据"
+    },
+    {
+      "name": "missing_price.restart-identical",
+      "result": "pass",
+      "detail": "重启回读应保留相同正文、版本、核验状态、历史和模型元数据"
+    },
+    {
+      "name": "missing_price_recheck_1.restart-identical",
+      "result": "pass",
+      "detail": "重启回读应保留相同正文、版本、核验状态、历史和模型元数据"
+    }
+  ],
+  "semantic_review": "待人工逐段复核；引用存在不等于语义支持",
+  "provider_call_proof": "未采集服务商日志；mode与模型元数据不作为独立调用证明",
+  "browser_display": "未由本脚本验证",
+  "browser_download": "未由本脚本验证",
+  "restart_read": "passed",
+  "model_service_base_url": "接口未返回，待操作者补充非敏感服务基址",
+  "scope": "只操作记录中新建的测试草稿；补测新建缺票价草稿，保留普通案例与旧失败/降级结果，不读取其他草稿或密钥。",
+  "finished_at": "2026-11-19T18:23:20.144963+00:00",
+  "retry_code_history": [
+    {
+      "time": "2026-11-19T18:02:14.894102+00:00",
+      "code": {
+        "head": "ec50729155c150a0bb2ba74aa6913a45af843e16",
+        "branch": "feature/b-ai-refine",
+        "working_tree": "M README.md\n M backend/a_ai_main.py\n M backend/a_compat/ai.py\n M backend/a_compat/store.py\n M backend/a_main.py\n M backend/heritage_ai/__init__.py\n M backend/heritage_ai/generator.py\n M backend/tests/test_a_ai_integration.py\n M docs/ABC_INTEGRATION.md\n M docs/AI_TODO.md\n M docs/PROMPT_HISTORY.md\n M frontend/src/stores/draft.js\n?? backend/heritage_ai/prompts/refine_v1.txt\n?? backend/heritage_ai/refine_fixtures.py\n?? backend/heritage_ai/refiner.py\n?? backend/real_refiner.py\n?? backend/tests/test_refiner.py\n?? docs/B_REFINE_ACCEPTANCE_TOOL.md\n?? docs/B_REFINE_FIX_0_1_1.md\n?? docs/B_REFINE_INTEGRATION.md\n?? docs/B_REFINE_REAL_ACCEPTANCE.md\n?? docs/B_REFINE_VALIDATION.md\n?? docs/acceptance/b-refine-real/\n?? examples/b_refine/\n?? scripts/run_b_refine_acceptance.py",
+        "note": "HEAD只是当前提交；如有未提交改动，不能将HEAD单独视为已测试的新版本。以下文件哈希绑定本地源码。",
+        "source_sha256": {
+          "backend/a_ai_main.py": "a7166f5ff23f5ca5daf19784de0c0e7191ddb1d128a333d73c2cdbc5f72d7ea1",
+          "backend/a_main.py": "c1006a34b88fa338167fb64ba1a3296818f9efe90010708912bbbde4d90855eb",
+          "backend/a_compat/ai.py": "20cea35f621c30c4e845ed3139e8b158fa28a86b430a07ab8d80cfb0998080e8",
+          "backend/a_compat/store.py": "df857d6dde145fe470b331a364e6b7686a2d58d48f5425687ddefaa484600165",
+          "backend/heritage_ai/generator.py": "0cb7123406e543c8344746c3280632a6235f9bd9075c40633c5528991d17d5bf",
+          "backend/heritage_ai/refiner.py": "0908984a3a1d69129620cdad3300ac9b136cc0ecfc3c384ef150d16c4ae4d7d4",
+          "backend/heritage_ai/model.py": "f4dd2d4a50511f15693965ce090fdc2f9e6a34a120fd074aa6c5b83a55a63868",
+          "backend/heritage_ai/validation.py": "66bf3efabddb205b2e0d65aa968189ea5fcf59a1f5943811d16ce537c4a3b7ce",
+          "backend/heritage_ai/evidence.py": "51ded234e708c439ab461e9642782d354f86b4790479d34fdc114ad0bd0e4c54",
+          "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+          "backend/heritage_ai/prompts/review_v5.txt": "346d116a75a5ad269d8a2e8857d9bff0196256793d717cd370f559bff1b46a34",
+          "frontend/src/stores/draft.js": "ea734b5b2a183babe41c5ea5dc1aad0abfcb6a2bfe66e4d99bdb05231e0c1f59"
+        },
+        "source_lf_sha256": {
+          "backend/a_ai_main.py": "3848893d4987867d3dfc5111d842e2618212f9198edbeaf979453ff99ad8fd30",
+          "backend/a_main.py": "ad325189cf3498012c63305ba92edf84d765b04b169609d7f036a3f7f2882dd3",
+          "backend/a_compat/ai.py": "f84d230eeed0f05ac330d12efe05c986706aca133801936f298ca3fcdddee99c",
+          "backend/a_compat/store.py": "f093c50994b14b481aba44318c4be7066525e34ccc2786dbcaca8f28d1d2e7df",
+          "backend/heritage_ai/generator.py": "a50b3bd6cab4c1c96fde6b183b9a6d2f1ed7a9fb081c2a14b0a121a30f12a57a",
+          "backend/heritage_ai/refiner.py": "0908984a3a1d69129620cdad3300ac9b136cc0ecfc3c384ef150d16c4ae4d7d4",
+          "backend/heritage_ai/model.py": "c2b0c6a03b902c0f1c2a2aeacbb452a92eaa2ad9d41bc62a0001e5ba49581f99",
+          "backend/heritage_ai/validation.py": "0a72ae0d64d5296d7fbc5b170f73acfec7674ec3f246d12dd935e7657492881a",
+          "backend/heritage_ai/evidence.py": "92f0ac0740ed9931e85327fa3da1608d616deb03d75d0e13a98860903fc3d94b",
+          "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+          "backend/heritage_ai/prompts/review_v5.txt": "d4bee1aae196569b65c3b22ff72bcf2cc563e153205d02ca5d88e85f7eb7c999",
+          "frontend/src/stores/draft.js": "222d4023995128719a602b021b52726844e835cbf69eaf642ccc6c4902e05782"
+        }
+      }
+    },
+    {
+      "time": "2026-11-19T18:09:57.119397+00:00",
+      "code": {
+        "head": "ec50729155c150a0bb2ba74aa6913a45af843e16",
+        "branch": "feature/b-ai-refine",
+        "working_tree": "M README.md\n M backend/a_ai_main.py\n M backend/a_compat/ai.py\n M backend/a_compat/store.py\n M backend/a_main.py\n M backend/heritage_ai/__init__.py\n M backend/heritage_ai/generator.py\n M backend/tests/test_a_ai_integration.py\n M docs/ABC_INTEGRATION.md\n M docs/AI_TODO.md\n M docs/PROMPT_HISTORY.md\n M frontend/src/stores/draft.js\n?? backend/heritage_ai/prompts/refine_v1.txt\n?? backend/heritage_ai/prompts/refine_v2.txt\n?? backend/heritage_ai/refine_fixtures.py\n?? backend/heritage_ai/refiner.py\n?? backend/real_refiner.py\n?? backend/tests/test_refiner.py\n?? docs/B_REFINE_ACCEPTANCE_TOOL.md\n?? docs/B_REFINE_FIX_0_1_1.md\n?? docs/B_REFINE_FIX_0_1_2.md\n?? docs/B_REFINE_INTEGRATION.md\n?? docs/B_REFINE_REAL_ACCEPTANCE.md\n?? docs/B_REFINE_VALIDATION.md\n?? docs/acceptance/b-refine-real/\n?? examples/b_refine/\n?? scripts/run_b_refine_acceptance.py",
+        "note": "HEAD只是当前提交；如有未提交改动，不能将HEAD单独视为已测试的新版本。以下文件哈希绑定本地源码。",
+        "source_sha256": {
+          "backend/a_ai_main.py": "a7166f5ff23f5ca5daf19784de0c0e7191ddb1d128a333d73c2cdbc5f72d7ea1",
+          "backend/a_main.py": "c1006a34b88fa338167fb64ba1a3296818f9efe90010708912bbbde4d90855eb",
+          "backend/a_compat/ai.py": "20cea35f621c30c4e845ed3139e8b158fa28a86b430a07ab8d80cfb0998080e8",
+          "backend/a_compat/store.py": "df857d6dde145fe470b331a364e6b7686a2d58d48f5425687ddefaa484600165",
+          "backend/heritage_ai/generator.py": "0cb7123406e543c8344746c3280632a6235f9bd9075c40633c5528991d17d5bf",
+          "backend/heritage_ai/refiner.py": "65d6dfa6f4bc9542197787a256f0c4536c3822c630b554d4766be1e4d048c073",
+          "backend/heritage_ai/model.py": "f4dd2d4a50511f15693965ce090fdc2f9e6a34a120fd074aa6c5b83a55a63868",
+          "backend/heritage_ai/validation.py": "66bf3efabddb205b2e0d65aa968189ea5fcf59a1f5943811d16ce537c4a3b7ce",
+          "backend/heritage_ai/evidence.py": "51ded234e708c439ab461e9642782d354f86b4790479d34fdc114ad0bd0e4c54",
+          "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+          "backend/heritage_ai/prompts/refine_v2.txt": "d34a2ba717b66bfd2f77d691a5ee2d8b2e92513f58cd13fba50447d4a4b0c721",
+          "backend/heritage_ai/prompts/review_v5.txt": "346d116a75a5ad269d8a2e8857d9bff0196256793d717cd370f559bff1b46a34",
+          "frontend/src/stores/draft.js": "ea734b5b2a183babe41c5ea5dc1aad0abfcb6a2bfe66e4d99bdb05231e0c1f59"
+        },
+        "source_lf_sha256": {
+          "backend/a_ai_main.py": "3848893d4987867d3dfc5111d842e2618212f9198edbeaf979453ff99ad8fd30",
+          "backend/a_main.py": "ad325189cf3498012c63305ba92edf84d765b04b169609d7f036a3f7f2882dd3",
+          "backend/a_compat/ai.py": "f84d230eeed0f05ac330d12efe05c986706aca133801936f298ca3fcdddee99c",
+          "backend/a_compat/store.py": "f093c50994b14b481aba44318c4be7066525e34ccc2786dbcaca8f28d1d2e7df",
+          "backend/heritage_ai/generator.py": "a50b3bd6cab4c1c96fde6b183b9a6d2f1ed7a9fb081c2a14b0a121a30f12a57a",
+          "backend/heritage_ai/refiner.py": "65d6dfa6f4bc9542197787a256f0c4536c3822c630b554d4766be1e4d048c073",
+          "backend/heritage_ai/model.py": "c2b0c6a03b902c0f1c2a2aeacbb452a92eaa2ad9d41bc62a0001e5ba49581f99",
+          "backend/heritage_ai/validation.py": "0a72ae0d64d5296d7fbc5b170f73acfec7674ec3f246d12dd935e7657492881a",
+          "backend/heritage_ai/evidence.py": "92f0ac0740ed9931e85327fa3da1608d616deb03d75d0e13a98860903fc3d94b",
+          "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+          "backend/heritage_ai/prompts/refine_v2.txt": "d34a2ba717b66bfd2f77d691a5ee2d8b2e92513f58cd13fba50447d4a4b0c721",
+          "backend/heritage_ai/prompts/review_v5.txt": "d4bee1aae196569b65c3b22ff72bcf2cc563e153205d02ca5d88e85f7eb7c999",
+          "frontend/src/stores/draft.js": "222d4023995128719a602b021b52726844e835cbf69eaf642ccc6c4902e05782"
+        }
+      }
+    }
+  ],
+  "price_rechecks": [
+    {
+      "case": "missing_price_recheck_1",
+      "time": "2026-11-19T18:22:10.427845+00:00",
+      "code": {
+        "head": "ec50729155c150a0bb2ba74aa6913a45af843e16",
+        "branch": "feature/b-ai-refine",
+        "working_tree": "M README.md\n M backend/a_ai_main.py\n M backend/a_compat/ai.py\n M backend/a_compat/store.py\n M backend/a_main.py\n M backend/heritage_ai/__init__.py\n M backend/heritage_ai/generator.py\n M backend/tests/test_a_ai_integration.py\n M docs/ABC_INTEGRATION.md\n M docs/AI_TODO.md\n M docs/PROMPT_HISTORY.md\n M frontend/src/stores/draft.js\n?? backend/heritage_ai/prompts/refine_v1.txt\n?? backend/heritage_ai/prompts/refine_v2.txt\n?? backend/heritage_ai/refine_fixtures.py\n?? backend/heritage_ai/refiner.py\n?? backend/heritage_ai/retrieval.py\n?? backend/real_refiner.py\n?? backend/tests/test_refine_acceptance_tool.py\n?? backend/tests/test_refiner.py\n?? docs/B_REFINE_ACCEPTANCE_TOOL.md\n?? docs/B_REFINE_FIX_0_1_1.md\n?? docs/B_REFINE_FIX_0_1_2.md\n?? docs/B_REFINE_FIX_0_1_3.md\n?? docs/B_REFINE_INTEGRATION.md\n?? docs/B_REFINE_REAL_ACCEPTANCE.md\n?? docs/B_REFINE_VALIDATION.md\n?? docs/acceptance/b-refine-real/\n?? examples/b_refine/\n?? scripts/run_b_refine_acceptance.py",
+        "note": "HEAD只是当前提交；如有未提交改动，不能将HEAD单独视为已测试的新版本。以下文件哈希绑定本地源码。",
+        "source_sha256": {
+          "backend/a_ai_main.py": "a7166f5ff23f5ca5daf19784de0c0e7191ddb1d128a333d73c2cdbc5f72d7ea1",
+          "backend/a_main.py": "c1006a34b88fa338167fb64ba1a3296818f9efe90010708912bbbde4d90855eb",
+          "backend/a_compat/ai.py": "20cea35f621c30c4e845ed3139e8b158fa28a86b430a07ab8d80cfb0998080e8",
+          "backend/a_compat/store.py": "df857d6dde145fe470b331a364e6b7686a2d58d48f5425687ddefaa484600165",
+          "backend/heritage_ai/generator.py": "0cb7123406e543c8344746c3280632a6235f9bd9075c40633c5528991d17d5bf",
+          "backend/heritage_ai/refiner.py": "4e786a4e1cc5e2172c6e5c8832666753b34e338efa8467c164c4127d9f558fbe",
+          "backend/heritage_ai/retrieval.py": "d6d75f03423fea69f6443e8cfea0953e00a0a5f695442481cf5bebd02fca84c7",
+          "backend/heritage_ai/model.py": "f4dd2d4a50511f15693965ce090fdc2f9e6a34a120fd074aa6c5b83a55a63868",
+          "backend/heritage_ai/validation.py": "66bf3efabddb205b2e0d65aa968189ea5fcf59a1f5943811d16ce537c4a3b7ce",
+          "backend/heritage_ai/evidence.py": "51ded234e708c439ab461e9642782d354f86b4790479d34fdc114ad0bd0e4c54",
+          "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+          "backend/heritage_ai/prompts/refine_v2.txt": "d34a2ba717b66bfd2f77d691a5ee2d8b2e92513f58cd13fba50447d4a4b0c721",
+          "backend/heritage_ai/prompts/review_v5.txt": "346d116a75a5ad269d8a2e8857d9bff0196256793d717cd370f559bff1b46a34",
+          "frontend/src/stores/draft.js": "ea734b5b2a183babe41c5ea5dc1aad0abfcb6a2bfe66e4d99bdb05231e0c1f59"
+        },
+        "source_lf_sha256": {
+          "backend/a_ai_main.py": "3848893d4987867d3dfc5111d842e2618212f9198edbeaf979453ff99ad8fd30",
+          "backend/a_main.py": "ad325189cf3498012c63305ba92edf84d765b04b169609d7f036a3f7f2882dd3",
+          "backend/a_compat/ai.py": "f84d230eeed0f05ac330d12efe05c986706aca133801936f298ca3fcdddee99c",
+          "backend/a_compat/store.py": "f093c50994b14b481aba44318c4be7066525e34ccc2786dbcaca8f28d1d2e7df",
+          "backend/heritage_ai/generator.py": "a50b3bd6cab4c1c96fde6b183b9a6d2f1ed7a9fb081c2a14b0a121a30f12a57a",
+          "backend/heritage_ai/refiner.py": "4e786a4e1cc5e2172c6e5c8832666753b34e338efa8467c164c4127d9f558fbe",
+          "backend/heritage_ai/retrieval.py": "d6d75f03423fea69f6443e8cfea0953e00a0a5f695442481cf5bebd02fca84c7",
+          "backend/heritage_ai/model.py": "c2b0c6a03b902c0f1c2a2aeacbb452a92eaa2ad9d41bc62a0001e5ba49581f99",
+          "backend/heritage_ai/validation.py": "0a72ae0d64d5296d7fbc5b170f73acfec7674ec3f246d12dd935e7657492881a",
+          "backend/heritage_ai/evidence.py": "92f0ac0740ed9931e85327fa3da1608d616deb03d75d0e13a98860903fc3d94b",
+          "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+          "backend/heritage_ai/prompts/refine_v2.txt": "d34a2ba717b66bfd2f77d691a5ee2d8b2e92513f58cd13fba50447d4a4b0c721",
+          "backend/heritage_ai/prompts/review_v5.txt": "d4bee1aae196569b65c3b22ff72bcf2cc563e153205d02ca5d88e85f7eb7c999",
+          "frontend/src/stores/draft.js": "222d4023995128719a602b021b52726844e835cbf69eaf642ccc6c4902e05782"
+        }
+      }
+    }
+  ],
+  "current_price_case": "missing_price_recheck_1",
+  "restart_operator_note": "由操作者先重启后端，再执行本命令；脚本只能核对回读数据，不能独立证明重启动作。"
+}

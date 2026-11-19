@@ -1,0 +1,276 @@
+{
+  "format": "txt",
+  "history": [
+    {
+      "id": "generated-A-2915de965544475a8d3e1ef9c06f5bbf",
+      "type": "ai",
+      "title": "模型生成与核验",
+      "who": "AI",
+      "whoClass": "ai",
+      "time": "2026-11-19T17:29:00.429500+00:00",
+      "desc": "真实模型已执行生成与依据核验；仅核对提交资料，不能证明资料本身真实。发布前仍需人工复核。",
+      "diagnostics": [
+        {
+          "id": "P1",
+          "text": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。",
+          "status": "supported",
+          "evidence": [
+            {
+              "source_id": "src_6ab5f3b7ce698c5d3cc71cf5541008a726fb57f350c69c38947f5f3956ee9eef",
+              "source_title": "杨家埠木版年画｜国家级非遗项目介绍",
+              "source_url": "https://www.ihchina.cn/project_details/13904.html",
+              "quote": "山东省潍坊市杨家埠的一种民间版画",
+              "start": 0,
+              "end": 16,
+              "supports_segment": true
+            }
+          ],
+          "verification_reason": "引文逐字给出“山东省潍坊市杨家埠的一种民间版画”，完整支持地点（山东省潍坊市杨家埠）与类别（民间版画）两项事实；段落未附加历史年限、非遗认定、全程手工或非流水线等断言，“来认识”“记下来”属不可客观验证的推荐语气，无缺口。"
+        },
+        {
+          "id": "P2",
+          "text": "它是怎么做出来的？资料里写得很清楚：杨家埠木版年画分钩描、刻版、印刷三道工序。想深入了解的朋友，可以从这三道工序开始一起认识它。",
+          "status": "supported",
+          "evidence": [
+            {
+              "source_id": "src_9eabd907d21571b0dd33bd3aa8f187c3f1748f3711c3be584460446b652eeaf3",
+              "source_title": "年画之乡景色新｜工艺介绍",
+              "source_url": "https://www.ihchina.cn/project_details/9691",
+              "quote": "杨家埠木版年画分钩描、刻版、印刷3道工序",
+              "start": 0,
+              "end": 20,
+              "supports_segment": true
+            }
+          ],
+          "verification_reason": "引文“杨家埠木版年画分钩描、刻版、印刷3道工序”支持工序名称、数量（三道）及列举顺序，文案仅作等义复述，未新增线稿画法、刻版材质、上墨工具或“全部靠手/非机器生产”等无依据细节；结尾为个人推荐式表达，无事实缺口。"
+        }
+      ]
+    },
+    {
+      "id": "server-qa-ccf893fc46e645309393bd72c72f813f",
+      "version": 2,
+      "type": "qa",
+      "title": "追问改写与核验",
+      "who": "AI",
+      "whoClass": "ai",
+      "instruction": "第二段压缩一半，保留制作工序，不新增事实。",
+      "time": "2026-11-19T17:29:15.263206+00:00",
+      "desc": "已处理追问并重新核验当前文案：2 处有资料依据，0 处待核验。请查看最新版正文和核验报告。",
+      "changed": true,
+      "applied": true,
+      "changed_segments": [
+        "P1",
+        "P2"
+      ],
+      "removed_segments": [],
+      "ai_meta": {
+        "mode": "live",
+        "operation": "rewrite",
+        "prompt_version": "refine-v1/review-v5",
+        "refine_prompt_version": "refine-v1",
+        "review_prompt_version": "v5",
+        "review_executed": true,
+        "model": "qwen4-max",
+        "verify_model": "qwen4-max",
+        "generated_at": "2026-11-19T17:29:15.258198+00:00",
+        "input_sha256": "0ec3d6f2c8f7c3b0d224b02058241582836014f262b336f24d9208f780113266"
+      },
+      "page_edits": [],
+      "diagnostics": [
+        {
+          "id": "P1",
+          "text": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。",
+          "status": "supported",
+          "evidence": [
+            {
+              "source_id": "src_6ab5f3b7ce698c5d3cc71cf5541008a726fb57f350c69c38947f5f3956ee9eef",
+              "source_title": "杨家埠木版年画｜国家级非遗项目介绍",
+              "source_url": "https://www.ihchina.cn/project_details/13904.html",
+              "quote": "山东省潍坊市杨家埠的一种民间版画",
+              "start": 0,
+              "end": 16,
+              "supports_segment": true
+            }
+          ],
+          "verification_reason": "引文逐字给出“山东省潍坊市杨家埠的一种民间版画”，完整支持地点（山东省潍坊市杨家埠）与类别（民间版画）；段落未涉及年份、历史长度、非遗认定、手工或流水线等生产方式判断，也未涉及费用服务，“来认识”“记下来”属不可客观验证的推荐语，无新增事实缺口。"
+        },
+        {
+          "id": "P2",
+          "text": "怎么做出来的？分钩描、刻版、印刷3道工序，就从这三步认识它～",
+          "status": "supported",
+          "evidence": [
+            {
+              "source_id": "src_9eabd907d21571b0dd33bd3aa8f187c3f1748f3711c3be584460446b652eeaf3",
+              "source_title": "年画之乡景色新｜工艺介绍",
+              "source_url": "https://www.ihchina.cn/project_details/9691",
+              "quote": "杨家埠木版年画分钩描、刻版、印刷3道工序",
+              "start": 0,
+              "end": 20,
+              "supports_segment": true
+            }
+          ],
+          "verification_reason": "引文“杨家埠木版年画分钩描、刻版、印刷3道工序”支持工序名称、数量3道及钩描—刻版—印刷的列举顺序，段落仅按原顺序复述这三步；未新增线稿画法、刻版材质、上墨、具体工具材料，也未断言全程手工或非流水线生产，“就从这三步认识它”为推荐性表达，无未获支持的事实断言。"
+        }
+      ],
+      "diff": {
+        "before": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。\n\n它是怎么做出来的？资料里写得很清楚：杨家埠木版年画分钩描、刻版、印刷三道工序。想深入了解的朋友，可以从这三道工序开始一起认识它。",
+        "after": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。\n\n怎么做出来的？分钩描、刻版、印刷3道工序，就从这三步认识它～"
+      }
+    },
+    {
+      "id": "server-qa-869bd3363cac4d3c91640f13316bb018",
+      "version": 3,
+      "type": "qa",
+      "title": "追问改写与核验",
+      "who": "AI",
+      "whoClass": "ai",
+      "instruction": "保留刚才的精简版，只把结尾改成一句邀请，不新增事实。",
+      "time": "2026-11-19T17:29:29.040971+00:00",
+      "desc": "已处理追问并重新核验当前文案：2 处有资料依据，0 处待核验。请查看最新版正文和核验报告。",
+      "changed": true,
+      "applied": true,
+      "changed_segments": [
+        "P1",
+        "P2"
+      ],
+      "removed_segments": [],
+      "ai_meta": {
+        "mode": "live",
+        "operation": "rewrite",
+        "prompt_version": "refine-v1/review-v5",
+        "refine_prompt_version": "refine-v1",
+        "review_prompt_version": "v5",
+        "review_executed": true,
+        "model": "qwen4-max",
+        "verify_model": "qwen4-max",
+        "generated_at": "2026-11-19T17:29:29.039402+00:00",
+        "input_sha256": "b33c06fd1c4ccd10cfbb3f09363829ed4bfaffb38a34c5077f77e6f4ca0d151a"
+      },
+      "page_edits": [],
+      "diagnostics": [
+        {
+          "id": "P1",
+          "text": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。",
+          "status": "supported",
+          "evidence": [
+            {
+              "source_id": "src_6ab5f3b7ce698c5d3cc71cf5541008a726fb57f350c69c38947f5f3956ee9eef",
+              "source_title": "杨家埠木版年画｜国家级非遗项目介绍",
+              "source_url": "https://www.ihchina.cn/project_details/13904.html",
+              "quote": "山东省潍坊市杨家埠的一种民间版画",
+              "start": 0,
+              "end": 16,
+              "supports_segment": true
+            }
+          ],
+          "verification_reason": "引文逐字给出「山东省潍坊市杨家埠的一种民间版画」，完整支持地点与类别；「来认识」「记下来」为不可客观验证的邀请性表达，段落未附加非遗认定、历史年限、手工或非流水线等事实断言。"
+        },
+        {
+          "id": "P2",
+          "text": "怎么做出来的？分钩描、刻版、印刷3道工序～一起来认识这三步吧！",
+          "status": "supported",
+          "evidence": [
+            {
+              "source_id": "src_9eabd907d21571b0dd33bd3aa8f187c3f1748f3711c3be584460446b652eeaf3",
+              "source_title": "年画之乡景色新｜工艺介绍",
+              "source_url": "https://www.ihchina.cn/project_details/9691",
+              "quote": "杨家埠木版年画分钩描、刻版、印刷3道工序",
+              "start": 0,
+              "end": 20,
+              "supports_segment": true
+            }
+          ],
+          "verification_reason": "引文逐字给出「杨家埠木版年画分钩描、刻版、印刷3道工序」，支持工序名称、数量3及列举顺序；段落仅复述该列举，未新增线稿画法、刻版材质、上墨工具、「全程手工」「每一步都是手上功夫」等未获支持的细节，结尾为主观邀请。"
+        }
+      ],
+      "diff": {
+        "before": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。\n\n怎么做出来的？分钩描、刻版、印刷3道工序，就从这三步认识它～",
+        "after": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。\n\n怎么做出来的？分钩描、刻版、印刷3道工序～一起来认识这三步吧！"
+      }
+    },
+    {
+      "id": "server-qa-4ba7fd8426c64cb2aab223c9b4baa7e5",
+      "version": 4,
+      "type": "qa",
+      "title": "依据说明",
+      "who": "AI",
+      "whoClass": "ai",
+      "instruction": "这些依据分别是什么？",
+      "time": "2026-11-19T17:29:31.421669+00:00",
+      "desc": "本轮说明现有核验记录，未执行改写或重新核验。\n正文1：有资料依据。S1 原文“山东省潍坊市杨家埠的一种民间版画”。引文逐字给出「山东省潍坊市杨家埠的一种民间版画」，完整支持地点与类别；「来认识」「记下来」为不可客观验证的邀请性表达，段落未附加非遗认定、历史年限、手工或非流水线等事实断言。\n正文2：有资料依据。S2 原文“杨家埠木版年画分钩描、刻版、印刷3道工序”。引文逐字给出「杨家埠木版年画分钩描、刻版、印刷3道工序」，支持工序名称、数量3及列举顺序；段落仅复述该列举，未新增线稿画法、刻版材质、上墨工具、「全程手工」「每一步都是手上功夫」等未获支持的细节，结尾为主观邀请。",
+      "changed": false,
+      "applied": false,
+      "changed_segments": [],
+      "removed_segments": [],
+      "ai_meta": {
+        "mode": "live",
+        "operation": "explain",
+        "prompt_version": "refine-v1",
+        "refine_prompt_version": "refine-v1",
+        "review_prompt_version": "v5",
+        "review_executed": false,
+        "model": "qwen4-max",
+        "verify_model": "qwen4-max",
+        "generated_at": "2026-11-19T17:29:31.420039+00:00",
+        "input_sha256": "82a6fd2cf8a7970328ec7266c48782c9931a9e7e15472d2817bed2cf266bd536"
+      },
+      "page_edits": [],
+      "diagnostics": []
+    },
+    {
+      "id": "server-5-P1",
+      "type": "human",
+      "who": "人工",
+      "whoClass": "human",
+      "title": "人工修改正文（服务端留痕）",
+      "time": "2026-11-19T17:29:31.441550+00:00",
+      "desc": "人工修改已保存；当前依据需重新复核，未调用 AI。",
+      "diff": {
+        "before": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。",
+        "after": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。我想把这段介绍留作出发前的阅读笔记。"
+      },
+      "before": {
+        "id": "P1",
+        "type": "body",
+        "label": "正文1",
+        "text": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。",
+        "claims": [
+          {
+            "id": "claim_P1",
+            "anchor": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。",
+            "status": "verified",
+            "cite_ids": [
+              "S1"
+            ],
+            "quotes": [
+              {
+                "source_id": "S1",
+                "quote": "山东省潍坊市杨家埠的一种民间版画"
+              }
+            ],
+            "reason": "引文逐字给出「山东省潍坊市杨家埠的一种民间版画」，完整支持地点与类别；「来认识」「记下来」为不可客观验证的邀请性表达，段落未附加非遗认定、历史年限、手工或非流水线等事实断言。",
+            "suggest": null
+          }
+        ]
+      },
+      "after": {
+        "id": "P1",
+        "type": "body",
+        "label": "正文1",
+        "text": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。我想把这段介绍留作出发前的阅读笔记。",
+        "claims": [
+          {
+            "id": "manual_P1_v5",
+            "anchor": "来认识杨家埠木版年画～它是山东省潍坊市杨家埠的一种民间版画，先把「地点与类别」记下来：杨家埠，民间版画。我想把这段介绍留作出发前的阅读笔记。",
+            "status": "needs_check",
+            "cite_ids": [],
+            "quotes": [],
+            "suggest": null,
+            "reason": "人工修改后待复核；旧依据仅保存在历史中，本次修改未重新运行 AI 核验。"
+          }
+        ],
+        "review_status": "edited_needs_review"
+      }
+    }
+  ]
+}

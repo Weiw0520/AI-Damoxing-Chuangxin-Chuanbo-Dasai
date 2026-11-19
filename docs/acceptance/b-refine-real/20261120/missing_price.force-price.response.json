@@ -1,0 +1,6 @@
+{
+  "detail": {
+    "code": "AI_REFINEMENT_FAILED",
+    "message": "模型改写或依据核验失败，原草稿未修改；请检查模型服务后重试。"
+  }
+}

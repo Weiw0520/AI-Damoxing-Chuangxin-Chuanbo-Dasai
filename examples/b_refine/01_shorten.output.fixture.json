@@ -1,0 +1,71 @@
+{
+  "schema_version": "b-refine/0.1",
+  "meta": {
+    "mode": "fixture",
+    "operation": "rewrite",
+    "pipeline_version": "refine-core/0.1.3",
+    "prompt_version": "refine-v2/review-v5",
+    "refine_prompt_version": "refine-v2",
+    "review_prompt_version": "v5",
+    "review_executed": true,
+    "candidate_normalizations": [],
+    "evidence_retrieval": [],
+    "model": "offline-refine-fixture-not-a-real-model",
+    "verify_model": "offline-refine-fixture-not-a-real-model",
+    "generated_at": "2026-11-19T19:03:11.077481+00:00",
+    "input_sha256": "0879d8fb07e8ab235edfe5eedec0b852d82a6f963363bef0ed651e211f9eb9aa"
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "title": "杨家埠木版年画｜国家级非遗项目介绍",
+      "text": "山东省潍坊市杨家埠的一种民间版画",
+      "url": "https://www.ihchina.cn/project_details/13904.html"
+    },
+    {
+      "id": "S2",
+      "title": "年画之乡景色新｜工艺介绍",
+      "text": "杨家埠木版年画分钩描、刻版、印刷3道工序",
+      "url": "https://www.ihchina.cn/project_details/9691"
+    }
+  ],
+  "platform": "小红书",
+  "segments": [
+    {
+      "id": "P1",
+      "text": "杨家埠木版年画是山东省潍坊市杨家埠的一种民间版画。",
+      "status": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "source_title": "杨家埠木版年画｜国家级非遗项目介绍",
+          "source_url": "https://www.ihchina.cn/project_details/13904.html",
+          "quote": "山东省潍坊市杨家埠的一种民间版画",
+          "start": 0,
+          "end": 16,
+          "supports_segment": true
+        }
+      ],
+      "verification_reason": "仅用于离线测试的预设核验输出，不代表真实模型判断。"
+    },
+    {
+      "id": "P2",
+      "text": "杨家埠木版年画分钩描、刻版、印刷三道工序。",
+      "status": "supported",
+      "evidence": [
+        {
+          "source_id": "S2",
+          "source_title": "年画之乡景色新｜工艺介绍",
+          "source_url": "https://www.ihchina.cn/project_details/9691",
+          "quote": "杨家埠木版年画分钩描、刻版、印刷3道工序",
+          "start": 0,
+          "end": 20,
+          "supports_segment": true
+        }
+      ],
+      "verification_reason": "仅用于离线测试的预设核验输出，不代表真实模型判断。"
+    }
+  ],
+  "pending_checks": [],
+  "action": "rewrite"
+}

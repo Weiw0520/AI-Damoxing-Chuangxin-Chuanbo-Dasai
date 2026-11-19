@@ -1,8 +1,10 @@
 # A+B+C 可选接入入口与验收边界
 
-交付分支：`feat/abc-ai-integration`。依赖 PR #4 的 A 原版前端恢复及非 AI 后端；PR #4 已合入 main（merge commit `4064d42beaff0c5b452686ebe024cc9d3c95353e`），本分支以该 main 为基线，不重复携带 PR #4 的前端变更。交付整理日期为 2026-11-19；88 项测试、构建和浏览器回放/故障验收记录日期为 2026-11-18，真实模型调用为 0，见 `ABC_ACCEPTANCE.md`。
+2026-11-20 追问升级：可选 AI 入口已实现追问改写、独立依据核验及原子保存，见 [B_REFINE_INTEGRATION](B_REFINE_INTEGRATION.md)。本文件中的88项测试与真实调用为0描述的是下述2026-11-18离线基线；首次生成真实验收另见 `ABC_REAL_ACCEPTANCE_B.md`，新追问已完成qwen4-max与Windows Edge真实主流程验收，见 `B_REFINE_REAL_ACCEPTANCE.md`。
 
-前端固定为 A 的 `39ad8d2bfef17d232d92ecbf7187b9f645ed299b`，无需改请求、样式或交互。原 `backend.a_main:app` 继续是非 AI 入口，生成和追问均 501。新增 `backend.a_ai_main:app` 将 A 的生成请求适配到 B 的 v5 生成/核验核心，复用 C 兼容层的 SQLite 保存、列表、修改、历史和导出。原 C 的 `backend.main:app` 及 B 独立入口保持不变。
+接入基线历史分支：`feat/abc-ai-integration`；本次追问交付分支：`feature/b-ai-refine`，基于 `ec50729155c150a0bb2ba74aa6913a45af843e16` 的源码。依赖 PR #4 的 A 原版前端恢复及非 AI 后端；PR #4 已合入 main（merge commit `4064d42beaff0c5b452686ebe024cc9d3c95353e`），本分支以该 main 为基线，不重复携带 PR #4 的前端变更。交付整理日期为 2026-11-19；88 项测试、构建和浏览器回放/故障验收记录日期为 2026-11-18，真实模型调用为 0，见 `ABC_ACCEPTANCE.md`。
+
+前端以 A 的 `39ad8d2bfef17d232d92ecbf7187b9f645ed299b` 为基线；追问升级仅在 `stores/draft.js` 补充回执元数据同步与切换草稿保护，请求、样式和页面布局不变。原 `backend.a_main:app` 继续是非 AI 入口，生成和追问均501。`backend.a_ai_main:app` 将 A 的生成请求适配到 B 的v5核心，追问适配到新的refine-v2/review-v5核验流程（实现refine-core/0.1.3），复用 C 的 SQLite 保存、列表、修改、历史和导出。原 C 的 `backend.main:app` 及 B 独立生成入口保持不变。
 
 ## Windows PowerShell
 
@@ -54,7 +56,7 @@ B 的稳定 src_ 编号保存在 sources.origin_id，A 展示别名为 S1、S2�
 - 503 `AI_NOT_CONFIGURED`：缺少有效模型配置，未调用模型、未创建草稿。
 - 502 `AI_GENERATION_FAILED`：模型服务或核验失败，响应不包含提供方异常文本或凭据。
 - 504 `AI_TIMEOUT`：生成与核验总时限超出；没有创建草稿，超时工作线程即使稍后结束也不能写库。
-- 追问仍返回 501 `AI_NOT_IMPLEMENTED`：B 尚无多轮改写实现，本轮不伪造对话成功。
+- 追问：AI入口现已接通，错误、版本及重新核验行为见 `B_REFINE_INTEGRATION.md`；保留的非AI入口仍返回501。
 
 `A_AI_TIMEOUT_SECONDS` 默认 45，允许大于 0 且不超过 50 秒，早于 A 原版默认 60 秒客户端超时。B 的每次 HTTP 超时还受剩余总预算限制。服务端时限到达后，迟到结果不落库，且不再开始下一轮核验。浏览器主动断开本身不能保证立即取消已经发出的上游请求。B 自己报告的服务连接/读取错误仍统一为 502；总时限为 504。
 
@@ -65,7 +67,7 @@ A 原版的本地导出兜底、空引文通用说明、刷新不自动打开上
 在独立、干净的检出目录获取交付分支：
 
 ```powershell
-git clone --branch feat/abc-ai-integration https://github.com/Weiw0520/AI-Damoxing-Chuangxin-Chuanbo-Dasai.git
+git clone --branch feature/b-ai-refine https://github.com/Weiw0520/AI-Damoxing-Chuangxin-Chuanbo-Dasai.git
 Set-Location AI-Damoxing-Chuangxin-Chuanbo-Dasai
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r backend/requirements.txt
@@ -95,4 +97,8 @@ $env:A_AI_TIMEOUT_SECONDS = '45'
 
 B 应分别跑普通资料和缺票价需求，确认响应为 mode=real，并核对 ai_meta、引文和逐段状态；走完查看依据、人工修改保存、服务端下载、刷新及重启读取。重启时保留同一 DRAFT_DB_PATH，只重新执行后端启动命令，不要换库。新一轮验收应记录模型、非敏感配置、耗时和真实结果，不把 mode 字段本身当成独立调用证明。
 
-现有追问仍是 501；430×932 窄屏从对话列表点新建后看不到资料表单的问题仍保留。本轮没有修改 A 前端来掩盖这些限制。真实复验结果应另行补充，不覆盖既有回放记录。
+非AI入口追问仍为501；AI入口已接通追问。430×932窄屏从对话列表点新建后看不到资料表单的问题仍保留，追问补丁没有修改该布局。真实复验结果应另行补充，不覆盖既有回放记录。
+
+## 2026-11-20最终追问复验
+
+当前166项后端测试通过；普通案例精简、连续追问、依据说明及缺票价防编造完成真实调用复验。Windows Edge网页补齐P2的S1类别和S2工序引文，人工改句保存，普通与缺票价两份实际TXT均与export 200内容一致，最新v5同库重启读取完整一致。原离线基线与失败记录保留，最终结论、源码绑定和边界见B_REFINE_REAL_ACCEPTANCE.md；不把源码尚未提交时的ec50729单独当作新增追问的测试提交。

@@ -1,0 +1,107 @@
+{
+  "schema_version": "b-refine-acceptance/1",
+  "main_flow_verdict": "passed",
+  "review_date": "2026-11-20",
+  "timezone": "Asia/Shanghai",
+  "tested_branch": "feature/b-ai-refine",
+  "baseline_head": "ec50729155c150a0bb2ba74aa6913a45af843e16",
+  "commit_binding": "源码尚在未提交工作区；实现以14个LF摘要绑定，不把旧HEAD当作追问提交。最终提交号留给Git/PR记录。",
+  "ai_meta": {
+    "mode": "live",
+    "operation": "rewrite",
+    "pipeline_version": "refine-core/0.1.3",
+    "prompt_version": "refine-v2/review-v5",
+    "refine_prompt_version": "refine-v2",
+    "review_prompt_version": "v5",
+    "review_executed": true,
+    "candidate_normalizations": [],
+    "evidence_retrieval": [],
+    "model": "qwen4-max",
+    "verify_model": "qwen4-max",
+    "generated_at": "2026-11-19T18:48:35.823827+00:00",
+    "input_sha256": "f86e16591a4398a7853f4a1ec75172769ce571dbe4ecfe5a52699ea919182bbc"
+  },
+  "tested_source_lf_sha256": {
+    "backend/a_ai_main.py": "3848893d4987867d3dfc5111d842e2618212f9198edbeaf979453ff99ad8fd30",
+    "backend/a_main.py": "ad325189cf3498012c63305ba92edf84d765b04b169609d7f036a3f7f2882dd3",
+    "backend/a_compat/ai.py": "f84d230eeed0f05ac330d12efe05c986706aca133801936f298ca3fcdddee99c",
+    "backend/a_compat/store.py": "f093c50994b14b481aba44318c4be7066525e34ccc2786dbcaca8f28d1d2e7df",
+    "backend/heritage_ai/generator.py": "a50b3bd6cab4c1c96fde6b183b9a6d2f1ed7a9fb081c2a14b0a121a30f12a57a",
+    "backend/heritage_ai/refiner.py": "4e786a4e1cc5e2172c6e5c8832666753b34e338efa8467c164c4127d9f558fbe",
+    "backend/heritage_ai/retrieval.py": "d6d75f03423fea69f6443e8cfea0953e00a0a5f695442481cf5bebd02fca84c7",
+    "backend/heritage_ai/model.py": "c2b0c6a03b902c0f1c2a2aeacbb452a92eaa2ad9d41bc62a0001e5ba49581f99",
+    "backend/heritage_ai/validation.py": "0a72ae0d64d5296d7fbc5b170f73acfec7674ec3f246d12dd935e7657492881a",
+    "backend/heritage_ai/evidence.py": "92f0ac0740ed9931e85327fa3da1608d616deb03d75d0e13a98860903fc3d94b",
+    "backend/heritage_ai/prompts/refine_v1.txt": "cd6228bc973505563f82ce5384b20c34927b364f86b98d2d84fd75bdbfa901dd",
+    "backend/heritage_ai/prompts/refine_v2.txt": "d34a2ba717b66bfd2f77d691a5ee2d8b2e92513f58cd13fba50447d4a4b0c721",
+    "backend/heritage_ai/prompts/review_v5.txt": "d4bee1aae196569b65c3b22ff72bcf2cc563e153205d02ca5d88e85f7eb7c999",
+    "frontend/src/stores/draft.js": "222d4023995128719a602b021b52726844e835cbf69eaf642ccc6c4902e05782"
+  },
+  "normal": {
+    "draft_id": "A-2915de965544475a8d3e1ef9c06f5bbf",
+    "version": 5,
+    "shorten": "64 -> 30 chars",
+    "followup": "passed",
+    "explain": "passed; review_executed=false",
+    "browser_download": "passed",
+    "restart": "passed"
+  },
+  "price": {
+    "draft_id": "A-8701e2e8f13d485da02ba8ec2518fa9d",
+    "version": 5,
+    "initial_generate_seconds": 38.9289,
+    "forced_price_refine_seconds": 30.3979,
+    "web_citation_refine_seconds": 16.9749,
+    "p2_citations": [
+      "S2",
+      "S1"
+    ],
+    "manual_edit": "出发前，我会再次核实门票信息。",
+    "manual_state": "edited_needs_review",
+    "ticket": "needs_check; no price invented",
+    "browser_download": "passed",
+    "restart": "passed"
+  },
+  "actual_browser": {
+    "channel": "msedge",
+    "version": "151.0.4129.101",
+    "playwright": "1.62.0",
+    "run_status": "browser-checks-completed",
+    "operator_restart": "重启由操作者在原后端终端执行；脚本验证最新快照一致，不能独立证明重启动作。"
+  },
+  "downloads": {
+    "price": {
+      "file": "downloads/A-8701e2e8f13d485da02ba8ec2518fa9d_v5.txt",
+      "draft_id": "A-8701e2e8f13d485da02ba8ec2518fa9d",
+      "version": 5,
+      "bytes": 705,
+      "sha256": "1d7190f5b0f42cba810be9336d4913bb7a1fa379e57b5adfbd638c90a4c34781",
+      "utf8_bom": true,
+      "matches_export_content": true
+    },
+    "normal": {
+      "file": "downloads/A-2915de965544475a8d3e1ef9c06f5bbf_v5.txt",
+      "draft_id": "A-2915de965544475a8d3e1ef9c06f5bbf",
+      "version": 5,
+      "bytes": 492,
+      "sha256": "d197447012b82a351a558290750f8d1a1e2b64289a2378dfee9e61c32530dca9",
+      "utf8_bom": true,
+      "matches_export_content": true
+    }
+  },
+  "offline_checks": {
+    "backend": "166 passed, 1 warning in 4.25s",
+    "frontend_build": "首版构建已通过，前端改动其后未变化；当前14摘要和真实网页回执核对一致。",
+    "web_tool_fix": "8 focused tests passed; SDK warning reproduced using actual finished method with futures; fixed helper not rerun against live model"
+  },
+  "limitations": [
+    "仅核对提交正文，不证明来源或资料本身真实。",
+    "本轮模型自行返回引文；原文检索补齐未真实触发，只有离线覆盖。",
+    "未采集提供方请求日志或计费，不独立推算调用次数。",
+    "窄屏布局、人工确认状态未随PUT持久化、保存后需重新打开刷新claims及空引文通用说明等A既有边界保留。"
+  ],
+  "raw_evidence": {
+    "api": "docs/acceptance/b-refine-real/20261120",
+    "browser": "docs/acceptance/b-refine-web/20261120"
+  }
+}
