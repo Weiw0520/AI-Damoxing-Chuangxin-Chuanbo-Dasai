@@ -1,5 +1,9 @@
 # 山东非遗文旅宣传内容核验与改写助手
 
+新增可选 A+B+C 生成接入入口 `backend.a_ai_main:app`，启动、资料格式、模型配置、超时和错误行为见 [A+B+C 接入说明](docs/ABC_INTEGRATION.md)。该入口缺少配置返回 503，不自动 mock；底部追问仍未实现。原非 AI 入口及原版前端保留，以下原有说明对应 `backend.a_main:app`。
+
+本轮结果见 [A+B+C 验收记录](docs/ABC_ACCEPTANCE.md)：真实模型因缺配置未完成；回放和故障模拟单独记录，窄屏问题保持原版并如实记录。
+
 本分支恢复 A 原版前端，并增加匹配其请求的非 AI 后端入口 `backend.a_main:app`。列表、详情、文件解析、人工保存、历史和导出可用；生成与对话改写返回 501“AI 功能暂未接入”。无需 API 密钥，不调用模型。完整启动步骤见 [前端联调指南](FRONTEND_GUIDE.md)，实际契约见 [A 兼容后端](docs/A_BACKEND_COMPAT.md)，B 的后续工作见 [AI 待办](docs/AI_TODO.md)。
 
 本轮网页实测、测试结果和保留原版前端的边界见 [兼容验收记录](docs/A_COMPAT_REVIEW.md)。最新 main 已包含 B 的独立生成模块，本轮原样保留，未接到 A，也未运行真实模型。

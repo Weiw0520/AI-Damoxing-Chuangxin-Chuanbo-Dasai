@@ -1,5 +1,7 @@
 # AI 接入待办（A 原版前端）
 
+当前新增可选 `backend.a_ai_main:app`，已实现 A 输入到 B 生成/核验核心的后端适配，并保留审计元数据；真实模型是否可用仍须配置后验收。本文件以下 501 说明仍适用于保留的非 AI 入口 `backend.a_main:app`。追问改写尚未实现，在两个入口均返回 501。最新启动与验收边界见 `ABC_INTEGRATION.md`。
+
 本轮只实现非 AI 后端。`backend.a_main:app` 的生成、追问接口均返回 HTTP 501；不会创建草稿、修改正文、增加版本或写入历史，不调用外部模型，也不需要密钥。
 
 补充 fetch 后，最新 main 已包含 PR #3 的 B 模块 `backend/real_generator.py`、`backend/heritage_ai/` 和 C 格式的独立入口 `backend.real_app:app`。这些上游文件原样保留，本轮未启动该入口、未读取模型密钥、未调用真实模型。它们输出的是 C 格式，不能直接替代 A 的 `/generate` 或 `/refine`；A 仍是上述 501 行为。后续可由 B 增加 A 结构适配和真实追问实现，具体 B 协议见 `AI_GENERATOR.md`，本轮不把上游离线回放测试算作真实 AI 联调。

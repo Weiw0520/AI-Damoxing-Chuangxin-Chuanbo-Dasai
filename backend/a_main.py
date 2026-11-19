@@ -1,6 +1,8 @@
 """Run this entry point on port 8000 for the original A frontend. No AI implementation."""
+import asyncio
 import json
 import os
+import time
 from pathlib import Path
 from typing import Literal
 
@@ -50,7 +52,7 @@ class RefineInput(InputModel):
     history: list[dict] = Field(default_factory=list)
 
 
-def create_a_app(db_path=None):
+def create_a_app(db_path=None, *, draft_generator=None, generation_timeout=45):
     store = Store(db_path)
     app = FastAPI(title="A 原版前端非 AI 兼容后端", version="0.1.0")
     app.state.store = store
@@ -83,9 +85,19 @@ def create_a_app(db_path=None):
     def export(draft_id: str, payload: ExportInput):
         return exporter.export(store.get(draft_id), payload.format, payload.history)
 
-    @app.post("/api/generate", status_code=501)
-    def generate(payload: GenerateInput):
-        raise failure(501, "AI_NOT_IMPLEMENTED", "AI 功能暂未接入：文案生成与自动事实核验尚未实现，未创建或保存草稿。")
+    @app.post("/api/generate", status_code=501 if draft_generator is None else 200)
+    async def generate(payload: GenerateInput):
+        if draft_generator is None:
+            raise failure(501, "AI_NOT_IMPLEMENTED", "AI 功能暂未接入：文案生成与自动事实核验尚未实现，未创建或保存草稿。")
+        deadline = time.monotonic() + generation_timeout
+        try:
+            draft = await asyncio.wait_for(
+                asyncio.to_thread(draft_generator, payload, deadline), generation_timeout)
+        except TimeoutError:
+            raise failure(504, "AI_TIMEOUT", "生成与核验超时，未创建或保存草稿；请稍后重试。") from None
+        # The worker only computes a candidate. Never let a timed-out worker save later.
+        store.insert_generated(draft)
+        return draft
 
     @app.post("/api/drafts/{draft_id}/refine", status_code=501)
     def refine(draft_id: str, payload: RefineInput):

@@ -61,6 +61,13 @@ class Store:
 
     def insert_manual(self, draft):
         """Explicit manual import only; never called by generate/refine routes."""
+        self._insert(draft)
+
+    def insert_generated(self, draft):
+        """Called only after the complete generation pipeline succeeds before timeout."""
+        self._insert(draft)
+
+    def _insert(self, draft):
         with self.connect() as conn:
             if conn.execute("SELECT 1 FROM a_drafts WHERE id=?", (draft["draft_id"],)).fetchone():
                 raise failure(409, "DRAFT_EXISTS", "草稿编号已存在，未覆盖原稿。")
@@ -110,7 +117,7 @@ class Store:
                     seg["review_status"] = "edited_needs_review"
                     seg["claims"] = [{"id": f"manual_{seg['id']}_v{version}", "anchor": seg["text"],
                                       "status": "needs_check", "cite_ids": [], "quotes": [], "suggest": None,
-                                      "reason": "人工修改后待复核；旧依据仅保存在历史中，未运行自动 AI 核验。"}] if seg["text"].strip() else []
+                                      "reason": "人工修改后待复核；旧依据仅保存在历史中，本次修改未重新运行 AI 核验。"}] if seg["text"].strip() else []
                     conn.execute("INSERT INTO a_revisions VALUES (?, ?, ?, ?, ?, ?)",
                                  (draft_id, version, seg["id"], json.dumps(before, ensure_ascii=False),
                                   json.dumps(seg, ensure_ascii=False), timestamp))
