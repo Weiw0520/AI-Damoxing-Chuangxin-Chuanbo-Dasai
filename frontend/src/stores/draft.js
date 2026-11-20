@@ -94,6 +94,74 @@ export const state = reactive({
 
 let confirmResolver = null
 
+// A draft ID alone is insufficient: reopening the same draft creates a new view.
+// Receipts (including catch/finally) belong to one request in one view only.
+let requestSequence = 0
+let viewSequence = 0
+let navigationRequest = null
+const requests = { save: null, refine: null }
+let editSequence = 0
+const editRevisions = new Map()
+
+function resetRequestScope() {
+  viewSequence += 1
+  navigationRequest = null
+  requests.save = requests.refine = null
+  editRevisions.clear()
+  state.saving = state.refining = false
+  state.saveError = state.refineError = ''
+}
+
+function beginRequest(kind) {
+  const request = {
+    id: ++requestSequence,
+    view: viewSequence,
+    draftId: state.draftId,
+    version: state.savedVersion,
+    history: JSON.parse(JSON.stringify(state.history)),
+    editRevisions: new Map(editRevisions),
+    segments: state.result.segments.map((s) => ({ id: s.id, text: currentText(s) })),
+  }
+  requests[kind] = request
+  return request
+}
+
+function ownsRequest(kind, request) {
+  return requests[kind]?.id === request.id && request.view === viewSequence &&
+    request.draftId === state.draftId && !!state.result
+}
+
+function editsSince(request) {
+  const submitted = new Map(request.segments.map((s) => [s.id, s.text]))
+  return state.result.segments
+    .filter((s) => !submitted.has(s.id) || currentText(s) !== submitted.get(s.id) ||
+      (editRevisions.get(s.id) || 0) > (request.editRevisions.get(s.id) || 0))
+    .map((s) => ({ id: s.id, text: currentText(s) }))
+}
+
+function rebaseEdits(segments, pending) {
+  const byId = new Map(segments.map((s) => [s.id, s]))
+  const edits = {}
+  const conflicts = []
+  for (const edit of pending) {
+    if (byId.has(edit.id)) {
+      if (edit.text !== byId.get(edit.id).text) edits[edit.id] = edit.text
+    } else {
+      conflicts.push(edit)
+    }
+  }
+  // Saving accepts only the server's current IDs. Put removed paragraphs in an
+  // explicit, unsaved recovery block in a surviving paragraph, never an invisible
+  // edits[removedId] or a silently invented server segment. The user can reorganize
+  // it with the existing editor before saving; all original human text survives.
+  if (conflicts.length) {
+    const target = segments[0]
+    const recovered = conflicts.map((s) => `【结构冲突：原段 ${s.id} 的人工编辑，待整理】\n${s.text}`).join('\n\n')
+    edits[target.id] = (edits[target.id] ?? target.text) + '\n\n' + recovered
+  }
+  return { edits, conflicts }
+}
+
 /* ------------------------------------------------------------ 派生数据 */
 export const claimsList = computed(() => {
   if (!state.result) return []
@@ -485,6 +553,7 @@ export function refreshConversations() {
 
 /** 从服务端的一整份草稿还原成页面状态。 */
 function hydrate(d) {
+  resetRequestScope()
   const segments = d.segments || []
   state.result = {
     draft_id: d.draft_id,
@@ -548,10 +617,14 @@ export async function openConversation(draftId) {
     )
     if (!ok) return
   }
+  const requestId = ++requestSequence
+  navigationRequest = requestId
   try {
     const d = await api.getDraft(draftId)
+    if (navigationRequest !== requestId) return
     hydrate(d)
   } catch (e) {
+    if (navigationRequest !== requestId) return
     toast('打开草稿失败：' + e.message, 3600)
     refreshConversations()
   }
@@ -609,6 +682,7 @@ export function resetInput() {
 }
 
 export function resetResult() {
+  resetRequestScope()
   state.result = null
   state.edits = {}
   state.editMode = false
@@ -703,20 +777,23 @@ export async function refine(instruction) {
 
   state.refining = true
   state.refineError = ''
-  const requestedDraftId = state.draftId
+  const request = beginRequest('refine')
   try {
-    const res = await api.refineDraft(requestedDraftId, {
+    const res = await api.refineDraft(request.draftId, {
       instruction: text,
-      base_version: state.savedVersion,
-      segments: state.result.segments.map((s) => ({ id: s.id, text: currentText(s) })),
-      history: state.history,
+      base_version: request.version,
+      segments: request.segments,
+      history: request.history,
     })
 
-    if (state.draftId !== requestedDraftId || !state.result) {
+    if (!ownsRequest('refine', request) || res.version < state.savedVersion) {
       refreshConversations()
       return null
     }
 
+    if (res.draft_id !== request.draftId) throw new Error('改写回执的草稿编号不匹配，页面编辑已保留。')
+    if (!res.segments?.length) throw new Error('改写回执没有可用段落；页面上的人工编辑已保留，请重新打开核对服务端版本。')
+    const { edits, conflicts } = rebaseEdits(res.segments, editsSince(request))
     state.result.segments = res.segments
     state.result.version = res.version
     state.result.updated_at = res.saved_at
@@ -725,8 +802,9 @@ export async function refine(instruction) {
     for (const key of ['model', 'prompt_version', 'prompt_excerpt', 'notice', 'mode', 'data_origin', 'ai_meta']) {
       if (res[key] != null) state.result[key] = res[key]
     }
-    state.edits = {}
-    state.editMode = false
+    state.edits = edits
+    state.editMode = Object.keys(edits).length > 0
+    if (state.editMode) openFile('draft')
     state.history = res.history
     state.savedVersion = res.version
     state.savedAt = res.saved_at
@@ -734,17 +812,24 @@ export async function refine(instruction) {
     resetVerify()
 
     refreshConversations()
-    if (res.changed.length || res.removed_segments.length) {
+    if (conflicts.length) {
+      toast('AI 改变了段落结构：被移除段落的后续人工文字已保留在首段末尾的“结构冲突”区，尚未保存，请整理后保存。', 9000)
+    } else if (state.editMode) {
+      toast(`AI 结果已到 v${res.version}；请求发出后的人工编辑已保留，尚未保存。`, 6000)
+    } else if (res.changed.length || res.removed_segments.length) {
       toast(`已改到 v${res.version}`)
     }
     return res
   } catch (err) {
-    if (state.draftId !== requestedDraftId || !state.result) return null
+    if (!ownsRequest('refine', request)) return null
     state.refineError = err.message || '改写失败'
     toast(state.refineError, 4200)
     return null
   } finally {
-    state.refining = false
+    if (ownsRequest('refine', request)) {
+      requests.refine = null
+      state.refining = false
+    }
   }
 }
 
@@ -778,6 +863,7 @@ export function setEditMode(on) {
 }
 
 export function setEdit(segId, text) {
+  editRevisions.set(segId, ++editSequence)
   state.edits[segId] = text
 }
 
@@ -842,7 +928,7 @@ export function applySuggest() {
     return
   }
 
-  state.edits[seg.id] = oldText.replace(claim.anchor, claim.suggest)
+  setEdit(seg.id, oldText.replace(claim.anchor, claim.suggest))
   claim.status = 'needs_check'
   claim.reason = claim.reason + '\n（已采纳 AI 建议表述，依据需重新核对）'
   pushHistory({
@@ -881,8 +967,9 @@ export function toggleManual() {
 
 /* ------------------------------------------------------------ 保存 */
 export async function save() {
-  if (!state.result) return null
-  const segments = state.result.segments.map((s) => ({ id: s.id, text: currentText(s) }))
+  if (!state.result || state.saving) return null
+  const request = beginRequest('save')
+  const submitted = new Map(request.segments.map((s) => [s.id, s.text]))
 
   const editLog = []
   state.result.segments.forEach((s) => {
@@ -901,20 +988,28 @@ export async function save() {
   state.saving = true
   state.saveError = ''
   try {
-    const res = await api.saveDraft(state.draftId, {
-      base_version: state.savedVersion || 1,
-      segments,
+    const res = await api.saveDraft(request.draftId, {
+      base_version: request.version || 1,
+      segments: request.segments,
       edit_log: editLog,
-      history: state.history,
+      history: request.history,
     })
 
-    // 保存成功后，编辑结果成为新的「原文」，保证导出即最后保存的版本
+    if (!ownsRequest('save', request) || res.version < state.savedVersion) {
+      refreshConversations()
+      return null
+    }
+    if (res.draft_id !== request.draftId) throw new Error('保存回执的草稿编号不匹配，页面编辑已保留。')
+    const pending = editsSince(request)
+    // Only the submitted snapshot was saved. Later typing must stay dirty.
     state.result.segments.forEach((s) => {
-      if (state.edits[s.id] != null) s.text = state.edits[s.id]
+      if (submitted.has(s.id)) s.text = submitted.get(s.id)
     })
-    state.edits = {}
+    state.edits = rebaseEdits(state.result.segments, pending).edits
     state.savedVersion = res.version
     state.savedAt = res.saved_at
+    state.result.version = res.version
+    state.result.updated_at = res.saved_at
 
     editLog.forEach((e) => {
       const seg = state.result.segments.find((x) => x.id === e.segment_id)
@@ -935,15 +1030,19 @@ export async function save() {
       desc: `草稿 ${state.draftId} 已写入，共 ${res.changed_segments.length} 段变更。之后导出的就是这个版本。`,
     })
 
-    toast(`已保存为 v${res.version}`)
+    toast(hasEdits.value ? `已保存提交时的 v${res.version}；后续人工编辑仍未保存，请继续保存。` : `已保存为 v${res.version}`)
     refreshConversations()
     return res
   } catch (err) {
+    if (!ownsRequest('save', request)) return null
     state.saveError = err.message || '未知错误'
     toast('保存失败：' + state.saveError, 3600)
     return null
   } finally {
-    state.saving = false
+    if (ownsRequest('save', request)) {
+      requests.save = null
+      state.saving = false
+    }
   }
 }
 
